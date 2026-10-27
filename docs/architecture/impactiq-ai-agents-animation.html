@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ImpactIQ Agent Run</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Manrope:wght@500;600;700&display=swap">
+<style>
+  body { margin: 0; }
+  /* Layout: header with transport controls, the 1700x1200 diagram scaled to fit (1700x1135), then narration beside the step list. */
+  :root {
+    --bg: #f6f8fb; --surface: #ffffff; --canvas: #ffffff; --grid: #eef1f4;
+    --fg: #1d2733; --fg-2: #3b4652; --muted: #5d6b79; --line: #7c8896; --edge: #3b4652; --border: #d3dae2;
+    --run: #1f6fd1; --run-soft: rgba(31,111,209,0.18); --ai: #8a4fe0; --ai-text: #6b3cc0; --ai-soft: rgba(138,79,224,0.06);
+    --ok: #2f9e57; --chip: #eef3fb;
+    --font-display: "Sora", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Manrope", "Segoe UI", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f141b; --surface: #161d27; --canvas: #121922; --grid: #1c2531;
+      --fg: #e6ebf2; --fg-2: #c3ccd8; --muted: #93a0b0; --line: #5f6c7c; --edge: #a9b4c2; --border: #2c3644;
+      --run: #5a9bff; --run-soft: rgba(90,155,255,0.22); --ai: #a77df0; --ai-text: #c3a4ff; --ai-soft: rgba(167,125,240,0.08);
+      --ok: #3fbf6f; --chip: #1c2633; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f141b; --surface: #161d27; --canvas: #121922; --grid: #1c2531;
+    --fg: #e6ebf2; --fg-2: #c3ccd8; --muted: #93a0b0; --line: #5f6c7c; --edge: #a9b4c2; --border: #2c3644;
+    --run: #5a9bff; --run-soft: rgba(90,155,255,0.22); --ai: #a77df0; --ai-text: #c3a4ff; --ai-soft: rgba(167,125,240,0.08);
+    --ok: #3fbf6f; --chip: #1c2633; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--font-body); padding: 20px 16px 28px; }
+  .page { max-width: 1400px; margin: 0 auto; display: grid; gap: 16px; }
+  header { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: end; justify-content: space-between; }
+  .eyebrow { font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  h1 { margin: 4px 0 0; font-family: var(--font-display); font-size: clamp(22px, 3vw, 30px); text-wrap: balance; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  button, select { font: 600 14px var(--font-body); border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--fg); padding: 9px 14px; cursor: pointer; }
+  button.primary { background: var(--run); border-color: var(--run); color: #fff; min-width: 104px; }
+  button:focus-visible, select:focus-visible { outline: 3px solid var(--run-soft); outline-offset: 2px; }
+  button:disabled { opacity: 0.5; cursor: default; }
+  label.speed { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--muted); }
+
+  .stage { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow-x: auto; }
+  .stage-inner { position: relative; }
+  #canvas {
+    position: absolute; left: 0; top: 0; width: 1700px; height: 1135px; transform-origin: 0 0;
+    background-color: var(--canvas);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  .group { position: absolute; border: 2px dashed var(--line); border-radius: 6px; }
+  .group span { position: absolute; right: 12px; top: 8px; font-weight: 700; font-size: 15px; color: var(--fg-2); }
+  .group.par { border-color: var(--ai); background: var(--ai-soft); }
+  .group.par span { left: 12px; right: auto; color: var(--ai-text); font-size: 13.5px; top: 6px; }
+  .node { position: absolute; width: 190px; margin-left: -95px; margin-top: -38px; display: grid; justify-items: center; text-align: center; transition: opacity 0.3s; }
+  .tile { position: relative; width: 76px; height: 76px; border-radius: 10px; display: grid; place-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.18); transition: box-shadow 0.3s, transform 0.3s; }
+  .tile.brand { background: #ffffff; border: 1.5px solid var(--border); }
+  .tile.dark { border: 1.5px solid var(--border); }
+  .tile img, .tile > svg { width: 50px; height: 50px; }
+  .tile em { position: absolute; display: grid; place-items: center; font-style: normal; }
+  .tile em.step { left: -10px; top: -10px; width: 26px; height: 26px; border-radius: 50%; background: #1d2733; color: #fff; font-size: 14px; font-weight: 700; border: 2px solid #fff; }
+  .tile em.ai { right: -11px; top: -11px; width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 1.5px solid #d3dae2; }
+  .tile em.ai svg { width: 17px; height: 17px; }
+  .tile em.check { right: -10px; bottom: -10px; width: 26px; height: 26px; border-radius: 50%; background: var(--ok); border: 2px solid var(--canvas); transform: scale(0); transition: transform 0.25s; }
+  .tile em.check svg { width: 14px; height: 14px; }
+  .node b { margin-top: 8px; font-size: 15px; color: var(--fg); }
+  .node small { font-size: 12.5px; color: var(--muted); }
+  .node.pending { opacity: 0.38; }
+  .node.running .tile { box-shadow: 0 0 0 5px var(--run-soft), 0 0 0 2px var(--run); transform: scale(1.06); animation: pulse 1.1s ease-in-out infinite; }
+  .node.ai-running .tile { box-shadow: 0 0 0 5px var(--ai-soft), 0 0 0 2px var(--ai); transform: scale(1.06); animation: pulse-ai 1.1s ease-in-out infinite; }
+  .node.done .tile em.check { transform: scale(1); }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 11px var(--run-soft), 0 0 0 2px var(--run); } }
+  @keyframes pulse-ai { 50% { box-shadow: 0 0 0 11px rgba(138,79,224,0.18), 0 0 0 2px var(--ai); } }
+
+  svg#edges { position: absolute; inset: 0; overflow: visible; }
+  .edge { fill: none; stroke: var(--edge); stroke-width: 2; transition: stroke 0.3s, opacity 0.3s; }
+  .edge.ai, .bracket { stroke: var(--ai); stroke-width: 2.5; }
+  .running-mode .edge { opacity: 0.35; }
+  .running-mode .edge.live, .running-mode .edge.used { opacity: 1; }
+  .edge.live { stroke: var(--run); stroke-width: 3.5; stroke-dasharray: 9 6; animation: flow 0.6s linear infinite; }
+  .edge.ai.live { stroke: var(--ai); }
+  .edge.used { stroke: var(--run); }
+  .edge.ai.used { stroke: var(--ai); }
+  @keyframes flow { to { stroke-dashoffset: -15; } }
+  .packet { fill: var(--run); stroke: var(--canvas); stroke-width: 3; }
+  .packet.ai { fill: var(--ai); }
+  .elabel { position: absolute; transform: translate(-50%, -50%); background: var(--canvas); padding: 1px 6px; font-size: 12.5px; color: var(--fg-2); white-space: nowrap; border-radius: 3px; }
+  .elabel.ai { color: var(--ai-text); font-weight: 700; }
+  .key { position: absolute; left: 40px; top: 40px; display: grid; gap: 10px; font-size: 14px; color: var(--fg-2); }
+  .key div { display: flex; align-items: center; gap: 10px; }
+  .key .lg { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; }
+  .key .lg.step { background: #1d2733; color: #fff; font-size: 12px; font-weight: 700; border: 2px solid #fff; }
+  .key .lg.ai { border: 1.5px solid #d3dae2; background: #fff; }
+  .key .lg.ai svg { width: 14px; height: 14px; }
+  .key .dot { width: 14px; height: 14px; border-radius: 50%; margin: 0 5px; }
+  .key strong { font-family: var(--font-display); font-size: 22px; color: var(--fg); }
+
+  .below { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; }
+  @media (max-width: 860px) { .below { grid-template-columns: minmax(0, 1fr); } }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; min-width: 0; }
+  .narr-step { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--run); }
+  .narr h2 { margin: 6px 0 8px; font-family: var(--font-display); font-size: 21px; text-wrap: balance; }
+  .narr p { margin: 0; line-height: 1.6; color: var(--fg-2); max-width: 65ch; }
+  .appview { margin-top: 16px; display: grid; gap: 4px; background: var(--chip); border-radius: 8px; padding: 12px 14px; font-size: 13.5px; }
+  .appview .eyebrow { font-size: 10.5px; }
+  .appview b { font-variant-numeric: tabular-nums; }
+  .bar { height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; margin-top: 6px; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--run); transition: width 0.4s; }
+  ol.steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; counter-reset: s; }
+  ol.steps li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 10px; align-items: center; padding: 7px 8px; border-radius: 6px; font-size: 14px; color: var(--muted); cursor: default; }
+  ol.steps li::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--border); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  ol.steps li.active { background: var(--chip); color: var(--fg); font-weight: 700; }
+  ol.steps li.active::before { border-color: var(--run); color: var(--run); }
+  ol.steps li.done { color: var(--fg-2); }
+  ol.steps li.done::before { content: "✓"; background: var(--ok); border-color: var(--ok); color: #fff; }
+  .hint { font-size: 12.5px; color: var(--muted); margin: 10px 0 0; }
+  kbd { font: 600 11.5px var(--font-body); border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; background: var(--surface); }
+  @media (prefers-reduced-motion: reduce) {
+    .node.running .tile, .node.ai-running .tile, .edge.live { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <header>
+    <div>
+      <div class="eyebrow">ImpactIQ · Multi-agent investigation</div>
+      <h1>How one investigation runs</h1>
+    </div>
+    <div class="controls">
+      <button id="play" class="primary" type="button">▶ Play</button>
+      <button id="next" type="button">Next step</button>
+      <button id="restart" type="button">↺ Restart</button>
+      <label class="speed" for="speed">Speed
+        <select id="speed">
+          <option value="0.6">Slow</option>
+          <option value="1" selected>Normal</option>
+          <option value="1.8">Fast</option>
+        </select>
+      </label>
+    </div>
+  </header>
+
+  <div class="stage" id="stage">
+    <div class="stage-inner" id="stageInner">
+      <div id="canvas">
+        <div class="key">
+          <strong>ImpactIQ AI Agents</strong>
+          <div><span class="lg step">1</span>Run order</div>
+          <div><span class="lg ai" id="keyGem"></span>Calls Gemini</div>
+          <div><span class="dot" style="background: var(--run)"></span>Data moving now</div>
+          <div><span class="dot" style="background: var(--ai)"></span>Gemini request / response</div>
+        </div>
+        <div class="group" style="left:530px; top:230px; width:970px; height:620px"><span>Google ADK multi-agent run (Spring Boot)</span></div>
+        <div class="group par" style="left:893px; top:326px; width:214px; height:414px"><span>⚡ Parallel</span></div>
+        <svg id="edges" width="1700" height="1135" aria-hidden="true"></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="below">
+    <section class="card narr" aria-live="polite">
+      <div class="narr-step" id="narrStep">Ready</div>
+      <h2 id="narrTitle">Press Play to watch a defect investigation run</h2>
+      <p id="narrText">The animation follows one defect from the Start investigation click to the cited report, in the same order the backend runs it. Use Next step to pause after each stage while you explain it.</p>
+      <div class="appview">
+        <span class="eyebrow">What the user sees in the app</span>
+        <span id="appText">No investigation running.</span>
+        <div class="bar"><i id="appBar"></i></div>
+      </div>
+    </section>
+    <section class="card">
+      <ol class="steps" id="stepList"></ol>
+      <p class="hint"><kbd>Space</kbd> play / pause · <kbd>→</kbd> next step · <kbd>R</kbd> restart</p>
+    </section>
+  </div>
+</div>
+
+<script>
+const ICON = { react: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48ZyBmaWxsPSIjNjFEQUZCIj48Y2lyY2xlIGN4PSI2NCIgY3k9IjY0IiByPSIxMS40Ii8+PHBhdGggZD0iTTEwNy4zIDQ1LjJjLTIuMi0uOC00LjUtMS42LTYuOS0yLjMuNi0yLjQgMS4xLTQuOCAxLjUtNy4xIDIuMS0xMy4yLS4yLTIyLjUtNi42LTI2LjEtMS45LTEuMS00LTEuNi02LjQtMS42LTcgMC0xNS45IDUuMi0yNC45IDEzLjktOS04LjctMTcuOS0xMy45LTI0LjktMTMuOS0yLjQgMC00LjUuNS02LjQgMS42LTYuNCAzLjctOC43IDEzLTYuNiAyNi4xLjQgMi4zLjkgNC43IDEuNSA3LjEtMi40LjctNC43IDEuNC02LjkgMi4zQzguMiA1MCAxLjQgNTYuNiAxLjQgNjRzNi45IDE0IDE5LjMgMTguOGMyLjIuOCA0LjUgMS42IDYuOSAyLjMtLjYgMi40LTEuMSA0LjgtMS41IDcuMS0yLjEgMTMuMi4yIDIyLjUgNi42IDI2LjEgMS45IDEuMSA0IDEuNiA2LjQgMS42IDcuMSAwIDE2LTUuMiAyNC45LTEzLjkgOSA4LjcgMTcuOSAxMy45IDI0LjkgMTMuOSAyLjQgMCA0LjUtLjUgNi40LTEuNiA2LjQtMy43IDguNy0xMyA2LjYtMjYuMS0uNC0yLjMtLjktNC43LTEuNS03LjEgMi40LS43IDQuNy0xLjQgNi45LTIuMyAxMi41LTQuOCAxOS4zLTExLjQgMTkuMy0xOC44cy02LjgtMTQtMTkuMy0xOC44ek05Mi41IDE0LjdjNC4xIDIuNCA1LjUgOS44IDMuOCAyMC4zLS4zIDIuMS0uOCA0LjMtMS40IDYuNi01LjItMS4yLTEwLjctMi0xNi41LTIuNS0zLjQtNC44LTYuOS05LjEtMTAuNC0xMyA3LjQtNy4zIDE0LjktMTIuMyAyMS0xMi4zIDEuMyAwIDIuNS4zIDMuNS45ek04MS4zIDc0Yy0xLjggMy4yLTMuOSA2LjQtNi4xIDkuNi0zLjcuMy03LjQuNC0xMS4yLjQtMy45IDAtNy42LS4xLTExLjItLjQtMi4yLTMuMi00LjItNi40LTYtOS42LTEuOS0zLjMtMy43LTYuNy01LjMtMTAgMS42LTMuMyAzLjQtNi43IDUuMy0xMCAxLjgtMy4yIDMuOS02LjQgNi4xLTkuNiAzLjctLjMgNy40LS40IDExLjItLjQgMy45IDAgNy42LjEgMTEuMi40IDIuMiAzLjIgNC4yIDYuNCA2IDkuNiAxLjkgMy4zIDMuNyA2LjcgNS4zIDEwLTEuNyAzLjMtMy40IDYuNi01LjMgMTB6bTguMy0zLjNjMS41IDMuNSAyLjcgNi45IDMuOCAxMC4zLTMuNC44LTcgMS40LTEwLjggMS45IDEuMi0xLjkgMi41LTMuOSAzLjYtNiAxLjItMi4xIDIuMy00LjIgMy40LTYuMnpNNjQgOTcuOGMtMi40LTIuNi00LjctNS40LTYuOS04LjMgMi4zLjEgNC42LjIgNi45LjIgMi4zIDAgNC42LS4xIDYuOS0uMi0yLjIgMi45LTQuNSA1LjctNi45IDguM3ptLTE4LjYtMTVjLTMuOC0uNS03LjQtMS4xLTEwLjgtMS45IDEuMS0zLjMgMi4zLTYuOCAzLjgtMTAuMyAxLjEgMiAyLjIgNC4xIDMuNCA2LjEgMS4yIDIuMiAyLjQgNC4xIDMuNiA2LjF6bS03LTI1LjVjLTEuNS0zLjUtMi43LTYuOS0zLjgtMTAuMyAzLjQtLjggNy0xLjQgMTAuOC0xLjktMS4yIDEuOS0yLjUgMy45LTMuNiA2LTEuMiAyLjEtMi4zIDQuMi0zLjQgNi4yek02NCAzMC4yYzIuNCAyLjYgNC43IDUuNCA2LjkgOC4zLTIuMy0uMS00LjYtLjItNi45LS4yLTIuMyAwLTQuNi4xLTYuOS4yIDIuMi0yLjkgNC41LTUuNyA2LjktOC4zem0yMi4yIDIxbC0zLjYtNmMzLjguNSA3LjQgMS4xIDEwLjggMS45LTEuMSAzLjMtMi4zIDYuOC0zLjggMTAuMy0xLjEtMi4xLTIuMi00LjItMy40LTYuMnpNMzEuNyAzNWMtMS43LTEwLjUtLjMtMTcuOSAzLjgtMjAuMyAxLS42IDIuMi0uOSAzLjUtLjkgNiAwIDEzLjUgNC45IDIxIDEyLjMtMy41IDMuOC03IDguMi0xMC40IDEzLTUuOC41LTExLjMgMS40LTE2LjUgMi41LS42LTIuMy0xLTQuNS0xLjQtNi42ek03IDY0YzAtNC43IDUuNy05LjcgMTUuNy0xMy40IDItLjggNC4yLTEuNSA2LjQtMi4xIDEuNiA1IDMuNiAxMC4zIDYgMTUuNi0yLjQgNS4zLTQuNSAxMC41LTYgMTUuNUMxNS4zIDc1LjYgNyA2OS42IDcgNjR6bTI4LjUgNDkuM2MtNC4xLTIuNC01LjUtOS44LTMuOC0yMC4zLjMtMi4xLjgtNC4zIDEuNC02LjYgNS4yIDEuMiAxMC43IDIgMTYuNSAyLjUgMy40IDQuOCA2LjkgOS4xIDEwLjQgMTMtNy40IDcuMy0xNC45IDEyLjMtMjEgMTIuMy0xLjMgMC0yLjUtLjMtMy41LS45ek05Ni4zIDkzYzEuNyAxMC41LjMgMTcuOS0zLjggMjAuMy0xIC42LTIuMi45LTMuNS45LTYgMC0xMy41LTQuOS0yMS0xMi4zIDMuNS0zLjggNy04LjIgMTAuNC0xMyA1LjgtLjUgMTEuMy0xLjQgMTYuNS0yLjUuNiAyLjMgMSA0LjUgMS40IDYuNnptOS0xNS42Yy0yIC44LTQuMiAxLjUtNi40IDIuMS0xLjYtNS0zLjYtMTAuMy02LTE1LjYgMi40LTUuMyA0LjUtMTAuNSA2LTE1LjUgMTMuOCA0IDIyLjEgMTAgMjIuMSAxNS42IDAgNC43LTUuOCA5LjctMTUuNyAxMy40eiIvPjwvZz48L3N2Zz4=", fastapi: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cGF0aCBkPSJNNTYuODEzIDEyNy41ODZjLTEuOTAzLS4yMjctMy44OTktLjUyLTQuNDM0LS42NTJhNDguMDc4IDQ4LjA3OCAwIDAwLTIuMzc1LS41IDM2LjA0MiAzNi4wNDIgMCAwMS0yLjcwMy0uNjMzYy00LjE0NS0xLjE4OC00LjQ0Mi0xLjI4NS03LjU2Ny0yLjU2My0yLjg3NS0xLjE3Mi04LjE3Mi0zLjkxLTkuOTg0LTUuMTU2LS40OTYtLjM0NC0uOTYtLjYyMS0xLjAzMS0uNjIxLS4wNyAwLTEuMjMtLjgxNi0yLjU3OC0xLjgxMy04LjU3LTYuMzQzLTE1LjAwNC0xNC4wNDMtMTkuNjUzLTIzLjUyNy0uOC0xLjYyOS0xLjQ1My0zLjA3NC0xLjQ1My0zLjIxIDAtLjEzNC0uMTQ0LS41MDUtLjMyLS44MTctLjM2My0uNjQ5LS44OC0yLjA0Ny0xLjI5Ny0zLjQ5MmEyMC4wNDcgMjAuMDQ3IDAgMDAtLjYyNS0xLjgxM2MtLjE5NS0uNDYtLjM1Mi0xLjAyLS4zNTItMS4yNDYgMC0uMjI3LS4xOTUtLjk2NS0uNDMzLTEuNjQ1LS4yMzgtLjY3NS0uNDMtMS40NzItLjQzLTEuNzcgMC0uMjk2LS4xODctMS4zMi0uNDE4LTIuMjc2Qy41OTggNzMuNDkyIDAgNjcuMzc5IDAgNjMuOTUzYzAtMy40MjIuNTk4LTkuNTM1IDEuMTYtMTEuODk0LjIzLS45NTcuNDE4LTIgLjQxOC0yLjMyIDAtLjMyMS4xNDUtLjk1LjMyLTEuNC4xOC0uNDQ4LjQxLTEuMjUzLjUxNi0xLjc4OC4xMS0uNTM1LjM2LTEuNDU3LjU2My0yLjA1NWwuNTktMS43MjZjLjQzMy0xLjI5My44MzUtMi4zODcgMS4wMjctMi44MTMuMTEtLjIzOC41MzktMS4yMS45NTctMi4xNi42NzYtMS41MzUgMi4xMjUtNC40MyAyLjk3Mi01Ljk0NS4zMDktLjU1NS40MjYtLjczOSAyLjA5OC0zLjM1MiAyLjY0OS00LjE0OCA3LjE3Ni05LjMwOSAxMS4zOS0xMi45ODggMS40ODUtMS4yOTcgNi40NDYtNS4wNjMgNi42NjktNS4wNjMuMDYyIDAgLjUzLS4yODEgMS4wNDMtLjYyNSAxLjM0Ny0uOTAyIDIuNjY4LTEuNjY4IDQuMzktMi41MzFhNTMuMDYgNTMuMDYgMCAwMDEuODM2LS45NTNjLjI4NS0uMTY0LjgyLS40MSAzLjU2Ny0xLjY0LjYwNS0uMjcgMS4yNTctLjUxNiAzLjEzNi0xLjE3My40MTQtLjE0NCAxLjI0Ni0uNDQ5IDEuODQtLjY3Mi41OTgtLjIyMiAxLjMwMS0uNDA2IDEuNTYzLS40MDYuMjU4IDAgLjkzNy0uMTggMS41MDgtLjQwMi41Ny0uMjIzIDEuNjA1LS40NzcgMi4zMDQtLjU2My42OTYtLjA4MiAxLjYyMS0uMjc3IDIuMDU1LS40My40My0uMTQ4IDEuNjEtLjM0IDIuNjIxLS40MjVhNzIuNTcyIDcyLjU3MiAwIDAwMy45NDEtLjQ2NWMyLjY4OC0uMzk0IDguNTMyLS4zOTQgMTEuMTkyIDBhNzUuMDIgNzUuMDIgMCAwMDMuNzgxLjQ0NWMuOTUzLjA3OSAyLjE2OC4yNzggMi43MDMuNDQyLjUzNS4xNiAxLjQ2MS4zNiAyLjA1NS40MzMuNTk0LjA3OSAxLjU5NC4zMjUgMi4yMjIuNTUxLjYzLjIzIDEuMzQ0LjQxNCAxLjU5LjQxNHMuNzU0LjEzNyAxLjEyNS4zMDljLjM3NS4xNjggMS4xNjguNDQ5IDEuNzY2LjYyNS41OTQuMTggMS42MTMuNTM1IDIuMjcuNzk3LjY1Mi4yNjEgMS41MjcuNjA1IDEuOTQ1Ljc2MS43Ny4yOSA2LjQ2IDMuMTM3IDcuMjM0IDMuNjIyIDYuMjgxIDMuOTE3IDkuNTEyIDYuNDc2IDEzLjg1NiAxMC45NjQgNS4yMzggNS40MTQgOC43MTUgMTAuNTcgMTIuMjU0IDE4LjE2LjI1LjUzNi42MzIgMS4zMjkuODUxIDEuNzU4LjIxNS40MzQuMzk1Ljk0Mi4zOTUgMS4xMyAwIC4xOS4xOC43Ni40MDIgMS4yNjkuNjAyIDEuMzgzIDEuMTE3IDIuOTU3IDEuMzYgNC4xNi4xMi41OS4zNDMgMS4zMi40OTUgMS42MjEuMTUzLjMuMzMyIDEuMDYzLjQwMyAxLjY4OC4wNy42MjQuMjc3IDEuNjQ4LjQ1MyAyLjI2OSAxLjAyIDMuNTMxIDEuNTI3IDEzLjkzNC45MSAxOC41MzUtLjE4MyAxLjM2Ny0uMzkgMy4wMi0uNDYgMy42NzItLjExOCAxLjExNy0uNzA4IDQuMDA0LTEuMjEyIDUuOTQ1bC0uNTIgMi4wNTVjLS45OCAzLjk1Ny0zLjQwMiA5LjU5NC02LjM1OSAxNC44MDktMS4xNzIgMi4wNy01LjEwMSA3LjY2OC01Ljg0MyA4LjMyNC0uMDY3LjA1OC0uMzk5LjQ1LS43MzUuODYzLS4zMzYuNDE4LTEuNDE0IDEuNTg2LTIuMzkgMi41OTQtNC4zMDEgNC40NDEtNy43NyA3LjE4Ny0xMy44NiAxMC45NjktLjcyMi40NDktNi44NDcgMy40NDEtNy45OTIgMy45MDYtLjU5NC4yMzgtMS41ODYuNjQtMi4yMDMuODktLjYxMy4yNDctMS4yOTcuNDU0LTEuNTEyLjQ1OC0uMjE1LjAwMy0uNzgxLjE5NS0xLjI1OC40MjUtLjQ3Ni4yMy0xLjA4Mi40MjItMS4zNTEuNDI2LS4yNjYuMDA0LTEuMDQzLjE5Mi0xLjcyNy40MTgtLjY4My4yMy0xLjYzMy40NzctMi4xMS41NS0uNDc2LjA3NS0xLjQ5NS4yNzgtMi4yNjkuNDUtLjc3My4xNzItMy4xMS41MDgtNS4xODcuNzQ2YTU5LjA2IDU5LjA2IDAgMDEtMTMuOTQ1LS4wMzF6bTQuNzAzLTEyLjVjLjMtLjIzNC42MDktLjcuNjkxLTEuMDI3LjE4LS43MjMgMjkuMjM0LTU4Ljk3IDI5Ljc4MS01OS43LjQ2MS0uNjE3LjUwNC0xLjYwNS4wODItMS45NTMtLjIyMi0uMTg3LTMuMDA0LS4yNDYtMTAuNDMtLjIzNC01LjU3LjAxMi0xMC4yNTMuMDE2LTEwLjQwNi4wMTItLjIyNi0uMDA4LS4yNzMtMy43My0uMjUtMTkuNjcyLjAxNi0xMC44MTctLjAzNS0xOS43NjYtLjExMy0xOS44OS0uMDc4LS4xMjYtLjM4My0uMjI3LS42OC0uMjI3LS40MTggMC0uNjEzLjE4LS44Ny44MDgtLjQ4NSAxLjE2OC0xLjgyNSAzLjgyLTguMzQ4IDE2LjQ4NWEzNTU0LjU2OSAzNTU0LjU2OSAwIDAwLTQuMDU1IDcuODljLTEuMTU2IDIuMjYyLTIuOTggNS44MTMtNC4wNDcgNy44OWE4NzUxLjI0OCA4NzUxLjI0OCAwIDAwLTguNTk4IDE2Ljc1OWMtNC45MzMgOS42MzYtNS41MyAxMC43ODUtNS43NDIgMTEuMDM5LS40MS40OTYtLjYzMyAxLjY0LS40MDIgMi4wNy4yMS4zOTQuNjI5LjQxIDExLjA0My4zOTQgNS45NTMtLjAwNyAxMC44NjMuMDI0IDEwLjkxNC4wNy4xMzcuMTQxLjA4NiAzNy4zMS0uMDU1IDM4LjE5Ni0uMDkzLjU4Mi0uMDMxLjg5LjIzNSAxLjE1Ni40Ni40NjEuNTg2LjQ1NyAxLjI1LS4wNjZ6bTAgMCIgZmlsbD0iIzA0OTY4OCIvPjwvc3ZnPgo=", mariadb: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cGF0aCBmaWxsPSIjMDAzNTQ1IiBkPSJNMTI3LjQwMyAyMi43NjdhMS44MjQgMS44MjQgMCAwIDAtMS4yNC0uNDE0Yy0xLjIzNiAwLTIuODMzLjgzOC0zLjY5MyAxLjI4N2wtLjM0LjE3NWExMS43MjEgMTEuNzIxIDAgMCAxLTQuNjEyIDEuMTYgNjQuNzU2IDY0Ljc1NiAwIDAgMC00Ljg5Ni4zNGMtMTAuOTEgMS4xMjEtMTUuNzc3IDkuNDg0LTIwLjQ2NCAxNy41Ny0yLjU1MiA0LjM5OS01LjE4OCA4Ljk2OS04LjgwMiAxMi40Ni0uNzQ3LjcyNC0xLjU0MSAxLjQtMi4zNzggMi4wMi0zLjc0IDIuNzgtOC40MzUgNC43NjUtMTIuMDg4IDYuMTctMy41MTggMS4zNDUtNy4zNTkgMi41NTMtMTEuMDY2IDMuNzIyLTMuNCAxLjA3LTYuNjA5IDIuMDgyLTkuNTYgMy4xNzgtMS4xNDQuNDIyLTIuMjk5LjgyMy0zLjQ1OSAxLjIwNS0yLjY4OC44NzItNC42MjYgMS41NC03LjQ1OCAzLjQ5YTQ3Ljk0OSA0Ny45NDkgMCAwIDAtMi45NjMgMi4xODMgMzEuMjU1IDMxLjI1NSAwIDAgMC01LjkxMyA2LjIyNyAzNi43NjcgMzYuNzY3IDAgMCAxLTQuOTY2IDUuOTYxYy0uNTk4LjU4NC0xLjY1OS44NzItMy4yNDguODcyLTEuODYgMC00LjExNS0uMzg0LTYuNTAxLS43OS0yLjQ2Mi0uNDM1LTUuMDA2LS44NS03LjE4OC0uODUtMS43NzEgMC0zLjEzLjI5LTQuMTQxLjg3MyAwIDAtMS43MDguOTk1LTIuNDI3IDIuMjgybC43MDcuMzJhMTQuNDkzIDE0LjQ5MyAwIDAgMSAzLjAyIDIuMTgxIDE1LjE1MyAxNS4xNTMgMCAwIDAgMy4xNDEgMi4yMzRjLjM2NS4xMzQuNjk1LjM0NC45Ny42MTYtLjI5Ni40MzYtLjczNC45OTktMS4xOTMgMS42LTIuNTE3IDMuMjk2LTMuOTg3IDUuMzc3LTMuMTQ1IDYuNTExLjQwNC4yMS44NTUuMzEyIDEuMzEuMjk3IDUuNDkgMCA4LjQ0LTEuNDI2IDEyLjE3LTMuMjMzIDEuMDgyLS41MjIgMi4xODItMS4wNiAzLjQ5MS0xLjYxNSAyLjE4Mi0uOTQ2IDQuNTMxLTIuNDU2IDcuMDIyLTQuMDU0IDMuMjYtMi4xMjQgNi42NjgtNC4zMDYgOS45NzYtNS4zNThhMjcuMTg4IDI3LjE4OCAwIDAgMSA4LjM5MS0xLjE3OWMzLjQ5MiAwIDcuMTY3LjQ2NiAxMC43MS45MiAyLjY0MS4zNDIgNS4zNzcuNjkgOC4wNi44NTJhNTAuMjcgNTAuMjcgMCAwIDAgMi45NDYuMDkyIDM0LjEyNyAzNC4xMjcgMCAwIDAgMy43NTctLjE5NmwuMy0uMTA1YzEuODgzLTEuMTU4IDIuNzY1LTMuNjQgMy42MTgtNi4wNC41NTEtMS41NDYgMS4wMTQtMi45MzMgMS43NDctMy44MTQuMDQzLS4wNDMuMDktLjA4Mi4xNC0uMTE3YS4xNzUuMTc1IDAgMCAxIC4yMTMuMDM0di4wN2MtLjQzNSA5LjM4Ny00LjIxNSAxNS4zNDgtOC4wMzggMjAuNjQ2bC0yLjU1MiAyLjczNnMzLjU3MyAwIDUuNjA3LS43ODZjNy40Mi0yLjIxNyAxMy4wMTgtNy4xMDQgMTcuMDkzLTE0Ljg5OWE2My41ODMgNjMuNTgzIDAgMCAwIDIuNjkzLTYuMTVjLjA3LS4xNzIuNzEyLS40OTYuNjUuNDA3LS4wMjEuMjY3LS4wNC41NjMtLjA2MS44NzQgMCAuMTgyIDAgLjM3LS4wMzUuNTU4LS4xMDQgMS4zMS0uNDE0IDQuMDc2LS40MTQgNC4wNzZsMi4yOS0xLjIyN2M1LjUyNS0zLjQ5IDkuNzg0LTEwLjUzMyAxMy4wMTUtMjEuNDkxIDEuMzQ0LTQuNTY2IDIuMzMtOS4xIDMuMTk3LTEzLjA5MyAxLjAzOS00LjgwMSAxLjkzNS04LjkxNSAyLjk2LTEwLjUxMiAxLjYxLTIuNTA2IDQuMDY3LTQuMiA2LjQ0NS01Ljg0NC4zMjMtLjIyMi42NS0uNDM3Ljk3LS42NzMgMi45ODgtMi4wOTggNS45Ni00LjUyIDYuNjE2LTkuMDM3di0uMWMuNDc0LTMuMzcuMDczLTQuMjI4LS4zODQtNC42MjF6Ii8+PC9zdmc+Cg==" };
+const I = (name) => `<img src="${ICON[name]}" alt="">`;
+const G = {
+  user: `<svg viewBox="0 0 64 64"><rect x="10" y="12" width="44" height="30" rx="3" fill="#1d2733"/><rect x="14" y="16" width="36" height="22" fill="#ffffff"/><path d="M4 46h56l-4 6H8z" fill="#1d2733"/></svg>`,
+  shield: `<svg viewBox="0 0 64 64"><path d="M32 6l22 8v16c0 14-9 23-22 28C19 53 10 44 10 30V14z" fill="none" stroke="#fff" stroke-width="4"/><rect x="24" y="30" width="16" height="13" rx="2" fill="#fff"/><path d="M27 30v-4a5 5 0 0 1 10 0v4" fill="none" stroke="#fff" stroke-width="3"/></svg>`,
+  score: `<svg viewBox="0 0 64 64"><rect x="14" y="6" width="36" height="52" rx="5" fill="none" stroke="#fff" stroke-width="4"/><rect x="20" y="12" width="24" height="10" rx="2" fill="#fff"/><g fill="#fff"><circle cx="24" cy="32" r="3"/><circle cx="32" cy="32" r="3"/><circle cx="40" cy="32" r="3"/><circle cx="24" cy="41" r="3"/><circle cx="32" cy="41" r="3"/><circle cx="40" cy="41" r="3"/><circle cx="24" cy="50" r="3"/><rect x="29" y="47" width="14" height="6" rx="3"/></g></svg>`,
+  robot: `<svg viewBox="0 0 64 64"><rect x="12" y="18" width="40" height="32" rx="8" fill="none" stroke="#fff" stroke-width="4"/><path d="M32 8v10" stroke="#fff" stroke-width="4"/><circle cx="32" cy="8" r="4" fill="#fff"/><circle cx="24" cy="32" r="4.5" fill="#fff"/><circle cx="40" cy="32" r="4.5" fill="#fff"/><rect x="24" y="40" width="16" height="4" rx="2" fill="#fff"/><path d="M6 28v10M58 28v10" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>`,
+  rag: `<svg viewBox="0 0 64 64"><path d="M12 6h24l10 10v14" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><path d="M12 6v50h20" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><path d="M19 22h16M19 30h10" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><circle cx="42" cy="44" r="9" fill="none" stroke="#fff" stroke-width="4"/><path d="M49 51l7 7" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg>`,
+  folder: `<svg viewBox="0 0 64 64"><path d="M6 16a4 4 0 0 1 4-4h14l6 6h24a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><path d="M6 26h52" stroke="#fff" stroke-width="4"/></svg>`,
+  doc: `<svg viewBox="0 0 64 64"><path d="M14 6h26l10 10v42H14z" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><path d="M21 26h22M21 34h22M21 42h14" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/></svg>`,
+  search: `<svg viewBox="0 0 64 64"><circle cx="27" cy="27" r="16" fill="none" stroke="#fff" stroke-width="5"/><path d="M39 39l15 15" stroke="#fff" stroke-width="6" stroke-linecap="round"/></svg>`,
+  wrench: `<svg viewBox="0 0 64 64"><path d="M40 8a14 14 0 0 0-13 19L9 45a5 5 0 0 0 0 7l3 3a5 5 0 0 0 7 0l18-18a14 14 0 0 0 19-13l-8 8-8-2-2-8z" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/></svg>`,
+  brain: `<svg viewBox="0 0 64 64"><path d="M24 10a8 8 0 0 0-8 8 9 9 0 0 0-6 15 9 9 0 0 0 6 15 8 8 0 0 0 16 2V14a6 6 0 0 0-8-4zM40 10a8 8 0 0 1 8 8 9 9 0 0 1 6 15 9 9 0 0 1-6 15 8 8 0 0 1-16 2" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><path d="M20 28h6M38 36h6" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/></svg>`,
+  tag: `<svg viewBox="0 0 64 64"><path d="M8 10h24l26 26-22 22L8 32z" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><circle cx="20" cy="22" r="5" fill="#fff"/></svg>`,
+  check: `<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  gemini: `<svg viewBox="0 0 24 24"><defs><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f8ef7"/><stop offset="1" stop-color="#a256e8"/></linearGradient></defs><path fill="url(#gm)" d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"/></svg>`,
+};
+
+// id, x, y, tile background (null = brand logo on white), icon, title, subtitle, step badge, calls Gemini
+const NODES = [
+  ["dev", 90, 520, null, G.user, "Developer", "Clicks Start investigation"],
+  ["react", 280, 520, null, I("react"), "React App", "Live progress · report"],
+  ["orch", 620, 520, "#7b4fd6", G.robot, "Root Orchestrator", "Order · time budget · retries"],
+  ["ctx", 790, 520, "#1f6fd1", G.search, "Project Context Agent", "RAG search · no LLM", "1"],
+  ["triage", 1000, 400, "#d98a1c", G.tag, "Defect Triage Agent", "Category · severity view", "2", true],
+  ["evidence", 1000, 640, "#0f8a8a", G.rag, "Evidence Analysis Agent", "Findings from logs + docs", "2", true],
+  ["root", 1210, 520, "#d6334a", G.brain, "Root Cause Agent", "Ranked hypotheses", "3", true],
+  ["fix", 1385, 520, "#2f9e57", G.wrench, "Fix Recommendation", "Fix steps + tests", "4", true],
+  ["report", 1600, 520, "#1d2733", G.doc, "Investigation Report", "Every claim cited (D / E / K)"],
+  ["score", 620, 140, "#0f8a8a", G.score, "Impact Score", "Fixed formula · P0–P3"],
+  ["ml", 1000, 140, null, I("fastapi"), "ML Service", "Trained model · port 8001"],
+  ["safe", 620, 990, "#d6334a", G.shield, "Safety Layer", "Secrets + injection check"],
+  ["kb", 790, 990, "#1f6fd1", G.folder, "Knowledge Base", "Project docs · chunks + vectors"],
+  ["gemini", 1190, 990, null, G.gemini, "Google Gemini", "gemini-3.1-flash-lite"],
+  ["db", 1600, 990, null, I("mariadb"), "MariaDB", "Steps + report saved"],
+];
+
+// id, points, label, label x, label y, ai
+const EDGES = [
+  ["click", [[128,520],[242,520]], "Click", 185, 502],
+  ["post", [[318,520],[582,520]], "POST /investigations", 440, 502],
+  ["o2c", [[658,520],[752,520]]],
+  ["c2t", [[828,520],[880,520],[880,400],[962,400]]],
+  ["c2e", [[828,520],[880,520],[880,640],[962,640]]],
+  ["t2r", [[1038,400],[1125,400],[1125,520],[1172,520]]],
+  ["e2r", [[1038,640],[1125,640],[1125,520],[1172,520]]],
+  ["r2f", [[1248,520],[1347,520]]],
+  ["f2rep", [[1423,520],[1562,520]], "Assemble", 1515, 502],
+  ["score", [[620,224],[620,482]], "Score + priority (AI can't change)", 620, 300],
+  ["ml", [[1000,224],[1000,362]], "Advisory severity + component", 1000, 280],
+  ["safe", [[620,952],[620,612]], "Clean evidence", 620, 900],
+  ["kb", [[790,952],[790,612]], "Top-K chunks (BM25 + cosine)", 790, 920],
+  ["gem", [[1190,795],[1190,952]], "Prompt + evidence → typed JSON", 1190, 900, true],
+  ["save", [[1600,612],[1600,952]], "Save", 1600, 780],
+  ["poll", [[1600,1068],[1600,1100],[280,1100],[280,612]], "React polls every 1 s → timeline + each agent's result as it finishes", 940, 1100],
+];
+
+const STEPS = [
+  { title: "Developer starts an investigation", text: "Clicking Start investigation sends POST /investigations. Spring Boot puts the run on a background queue, so the page stays responsive and the user can leave and come back.", run: async () => {
+      setNode("dev", "running"); await send("click"); setNode("dev", "done");
+      setNode("react", "running"); await send("post"); setNode("react", "done");
+      setNode("orch", "running"); app(0, "Investigation queued, starting shortly."); await sleep(500);
+  } },
+  { title: "Impact score is fixed first", text: "The formula scores Users 30, Business 30, Customer 20 and Technical 20, then sets the risk level and P0–P3 priority. Agents receive the score as context but can never change it.", run: async () => {
+      setNode("score", "running"); await send("score"); setNode("score", "done"); await sleep(400);
+  } },
+  { title: "Evidence is cleaned before any AI sees it", text: "The safety layer redacts secrets such as passwords and API keys, and flags instruction-like text (prompt injection) so it is treated only as data.", run: async () => {
+      setNode("safe", "running"); await send("safe"); setNode("safe", "done"); await sleep(400);
+  } },
+  { title: "Project Context Agent searches project knowledge", text: "Hybrid search (BM25 keywords + cosine similarity on Gemini embeddings) returns the top-K document chunks for this project and component. No LLM call here, and access is checked for the user who started the run.", run: async () => {
+      setNode("ctx", "running"); app(0, "Agents are working… Now running: Project Context Agent"); await send("o2c");
+      setNode("kb", "running"); await send("kb"); setNode("kb", "done"); await sleep(400);
+      setNode("ctx", "done"); app(1, "Project Context Agent done: project passages found.");
+  } },
+  { title: "The ML model adds a second opinion", text: "The FastAPI service returns its top-3 severity and component guesses with probabilities, trained on 5,624 public Mozilla bugs. Triage sees it as advice only.", run: async () => {
+      setNode("ml", "running"); await send("ml"); setNode("ml", "done"); await sleep(300);
+  } },
+  { title: "Triage and Evidence Analysis run in parallel", text: "Both agents start at the same time. Each one sends its prompt plus cited evidence (D = defect, E = attachments, K = knowledge) to Gemini and gets JSON back that must match its schema.", run: async () => {
+      app(1, "Agents are working… Now running: Defect Triage Agent + Evidence Analysis Agent");
+      await Promise.all([send("c2t"), send("c2e")]);
+      setNode("triage", "ai-running"); setNode("evidence", "ai-running");
+      await callGemini(2);
+      setNode("triage", "done"); setNode("evidence", "done");
+      app(3, "Triage and Evidence Analysis done. Results shown in the timeline.");
+  } },
+  { title: "Root Cause Agent ranks hypotheses", text: "It combines the triage view and the evidence findings into ranked root-cause hypotheses. Every hypothesis must cite evidence IDs. This is the critical stage: without it the run fails.", run: async () => {
+      await Promise.all([send("t2r"), send("e2r")]);
+      setNode("root", "ai-running"); app(3, "Agents are working… Now running: Root Cause Analysis Agent");
+      await callGemini(1); setNode("root", "done"); app(4, "Root Cause Analysis done: ranked hypotheses ready.");
+  } },
+  { title: "Fix Recommendation Agent plans the fix", text: "It turns the top hypotheses into concrete fix steps and the tests to run, again citing evidence.", run: async () => {
+      await send("r2f"); setNode("fix", "ai-running"); app(4, "Agents are working… Now running: Fix Recommendation Agent");
+      await callGemini(1); setNode("fix", "done"); app(5, "Fix Recommendation done.");
+  } },
+  { title: "Report assembled and saved", text: "The orchestrator checks every citation, lists failed or skipped stages, and saves each step and the final report to MariaDB. If a non-critical agent fails, the run is PARTIAL and Retry reuses the stages that worked.", run: async () => {
+      await send("f2rep"); setNode("report", "running");
+      setNode("db", "running"); await send("save"); setNode("db", "done");
+      setNode("report", "done"); setNode("orch", "done"); app(6, "Report assembled.");
+  } },
+  { title: "Results appear live in the app", text: "React polls every second, so each agent's result shows up as soon as it finishes. The developer reads the cited hypotheses and fix steps, and marks each hypothesis helpful or not.", run: async () => {
+      setNode("react", "running"); await send("poll"); setNode("react", "done");
+      setNode("dev", "done"); app(6, "Report ready: hypotheses, fix steps and evidence, every claim cited.");
+  } },
+];
+
+/* ---------- build the diagram ---------- */
+const canvas = document.getElementById("canvas");
+const svg = document.getElementById("edges");
+const SVGNS = "http://www.w3.org/2000/svg";
+document.getElementById("keyGem").innerHTML = G.gemini;
+const nodeEls = {};
+for (const [id, x, y, bg, icon, title, sub, step, ai] of NODES) {
+  const n = document.createElement("div");
+  n.className = "node";
+  n.style.left = x + "px";
+  n.style.top = y + "px";
+  const badges = (step ? `<em class="step">${step}</em>` : "") + (ai ? `<em class="ai">${G.gemini}</em>` : "") + `<em class="check">${G.check}</em>`;
+  const tileClass = bg ? (bg === "#1d2733" ? "tile dark" : "tile") : "tile brand";
+  n.innerHTML = `<div class="${tileClass}" style="${bg ? "background:" + bg : ""}">${icon}${badges}</div><b>${title}</b><small>${sub}</small>`;
+  canvas.appendChild(n);
+  nodeEls[id] = n;
+}
+const bracket = document.createElementNS(SVGNS, "path");
+bracket.setAttribute("d", "M920 775 V795 H1465 V775");
+bracket.setAttribute("class", "edge ai bracket");
+svg.appendChild(bracket);
+const edgeEls = {};
+for (const [id, pts, label, lx, ly, ai] of EDGES) {
+  const p = document.createElementNS(SVGNS, "path");
+  p.setAttribute("d", "M" + pts.map(q => q.join(" ")).join(" L"));
+  p.setAttribute("class", "edge" + (ai ? " ai" : ""));
+  p.setAttribute("marker-end", `url(#${ai ? "ap" : "ah"})`);
+  svg.appendChild(p);
+  edgeEls[id] = p;
+  if (label) {
+    const l = document.createElement("div");
+    l.className = "elabel" + (ai ? " ai" : "");
+    l.style.left = lx + "px";
+    l.style.top = ly + "px";
+    l.textContent = label;
+    canvas.appendChild(l);
+  }
+}
+const brLabel = document.createElement("div");
+brLabel.className = "elabel ai";
+brLabel.style.left = "1180px";
+brLabel.style.top = "757px";
+brLabel.textContent = "4 AI agents (Google ADK LlmAgent) call Gemini";
+canvas.appendChild(brLabel);
+svg.insertAdjacentHTML("afterbegin", `<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill: var(--edge)"/></marker>
+  <marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill: var(--ai)"/></marker>
+</defs>`);
+
+/* ---------- scale the 1700x1200 canvas to the stage ---------- */
+const stage = document.getElementById("stage");
+const stageInner = document.getElementById("stageInner");
+const MIN_SCALE = 0.42;
+function fit() {
+  const scale = Math.max(MIN_SCALE, Math.min(1, (stage.clientWidth - 2) / 1700));
+  canvas.style.transform = `scale(${scale})`;
+  stageInner.style.width = 1700 * scale + "px";
+  stageInner.style.height = 1135 * scale + "px";
+}
+new ResizeObserver(fit).observe(stage);
+fit();
+
+/* ---------- clock: advances only while playing, scaled by speed ---------- */
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ABORT = Symbol("abort");
+let clock = 0, last = null, paused = true, speed = 1, runId = 0;
+let waiters = [], packets = [];
+let started = false, finished = false, stopAfterStep = false, stepsSinceResume = 0;
+
+function frame(t) {
+  if (last !== null && !paused) clock += (t - last) * speed;
+  last = t;
+  for (const pk of packets.slice()) {
+    const p = Math.min(1, (clock - pk.start) / pk.dur);
+    const at = pk.path.getPointAtLength(pk.len * (pk.reverse ? 1 - p : p));
+    pk.el.setAttribute("cx", at.x);
+    pk.el.setAttribute("cy", at.y);
+    if (p >= 1) { pk.el.remove(); packets.splice(packets.indexOf(pk), 1); pk.resolve(); }
+  }
+  for (const w of waiters.slice()) {
+    if (clock >= w.target) { waiters.splice(waiters.indexOf(w), 1); w.resolve(); }
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+function sleep(ms) {
+  const rid = runId;
+  return new Promise((resolve, reject) => waiters.push({ target: clock + ms, resolve: () => rid === runId ? resolve() : reject(ABORT), reject }));
+}
+function send(edgeId, opts = {}) {
+  const path = edgeEls[edgeId];
+  const ai = path.classList.contains("ai");
+  path.classList.add("live");
+  const len = path.getTotalLength();
+  const el = document.createElementNS(SVGNS, "circle");
+  el.setAttribute("r", ai ? 8 : 9);
+  el.setAttribute("class", "packet" + (ai ? " ai" : ""));
+  svg.appendChild(el);
+  const rid = runId;
+  return new Promise((resolve, reject) => {
+    packets.push({ path, len, el, reverse: !!opts.reverse, start: clock, dur: reduceMotion ? 1 : Math.max(450, len / 0.42),
+      resolve: () => { path.classList.remove("live"); path.classList.add("used"); rid === runId ? resolve() : reject(ABORT); }, reject });
+  });
+}
+async function callGemini(count) {
+  setNode("gemini", "ai-running");
+  bracket.classList.add("live");
+  await Promise.all(Array.from({ length: count }, (_, i) => sleep(i * 200).then(() => send("gem"))));
+  await sleep(500);
+  await Promise.all(Array.from({ length: count }, (_, i) => sleep(i * 200).then(() => send("gem", { reverse: true }))));
+  bracket.classList.remove("live");
+  bracket.classList.add("used");
+  setNode("gemini", "done");
+}
+function setNode(id, state) {
+  const n = nodeEls[id];
+  n.classList.remove("pending", "running", "ai-running", "done");
+  if (state) n.classList.add(state);
+}
+const appText = document.getElementById("appText");
+const appBar = document.getElementById("appBar");
+function app(doneCount, text) {
+  appText.innerHTML = `<b>${doneCount}/6</b> stages done · ${text}`;
+  appBar.style.width = (doneCount / 6 * 100) + "%";
+}
+
+/* ---------- narration + step list ---------- */
+const stepList = document.getElementById("stepList");
+STEPS.forEach((s) => { const li = document.createElement("li"); li.textContent = s.title; stepList.appendChild(li); });
+const narrStep = document.getElementById("narrStep");
+const narrTitle = document.getElementById("narrTitle");
+const narrText = document.getElementById("narrText");
+function narrate(i) {
+  narrStep.textContent = `Step ${i + 1} of ${STEPS.length}`;
+  narrTitle.textContent = STEPS[i].title;
+  narrText.textContent = STEPS[i].text;
+  [...stepList.children].forEach((li, k) => { li.classList.toggle("active", k === i); li.classList.toggle("done", k < i); });
+}
+
+/* ---------- runner + controls ---------- */
+const playBtn = document.getElementById("play");
+function syncControls() {
+  playBtn.textContent = !started || finished ? "▶ Play" : paused ? "▶ Resume" : "❚❚ Pause";
+}
+function resetVisuals() {
+  for (const pk of packets) pk.el.remove();
+  packets = [];
+  for (const w of waiters) w.reject(ABORT);
+  waiters = [];
+  Object.keys(nodeEls).forEach((id) => setNode(id, "pending"));
+  [...Object.values(edgeEls), bracket].forEach((e) => e.classList.remove("live", "used"));
+  canvas.classList.add("running-mode");
+  [...stepList.children].forEach((li) => li.classList.remove("active", "done"));
+  app(0, "No investigation running.");
+}
+async function run() {
+  const rid = ++runId;
+  started = true; finished = false; stepsSinceResume = 0;
+  resetVisuals();
+  try {
+    for (let i = 0; i < STEPS.length; i++) {
+      if (stopAfterStep && stepsSinceResume >= 1) { paused = true; syncControls(); }
+      await sleep(i === 0 ? 0 : 350);
+      if (rid !== runId) return;
+      stepsSinceResume++;
+      narrate(i);
+      await STEPS[i].run();
+    }
+    [...stepList.children].forEach((li) => { li.classList.remove("active"); li.classList.add("done"); });
+    narrStep.textContent = "Complete";
+    narrTitle.textContent = "Investigation complete";
+    narrText.textContent = "Every stage ran and was saved. Press Restart to watch it again, or use Next step to walk through it stage by stage.";
+    canvas.classList.remove("running-mode");
+    finished = true; paused = true; syncControls();
+  } catch (e) {
+    if (e !== ABORT) throw e;
+  }
+}
+function play() {
+  if (!started || finished) { stopAfterStep = false; paused = false; run(); }
+  else { paused = !paused; stopAfterStep = false; stepsSinceResume = 0; }
+  syncControls();
+}
+function next() {
+  stopAfterStep = true;
+  if (!started || finished) { paused = false; run(); }
+  else { stepsSinceResume = 0; paused = false; }
+  syncControls();
+}
+function restart() { stopAfterStep = false; paused = false; run(); syncControls(); }
+playBtn.addEventListener("click", play);
+document.getElementById("next").addEventListener("click", next);
+document.getElementById("restart").addEventListener("click", restart);
+document.getElementById("speed").addEventListener("change", (e) => { speed = Number(e.target.value); });
+document.addEventListener("keydown", (e) => {
+  if (e.target.closest && e.target.closest("select, button")) return;
+  if (e.code === "Space") { e.preventDefault(); play(); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); next(); }
+  else if (e.key === "r" || e.key === "R") restart();
+});
+</script>
+
+</body>
+</html>

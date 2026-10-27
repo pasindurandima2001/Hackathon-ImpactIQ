@@ -1,0 +1,15 @@
+# Database dumps can contain real data — never commit them
+db-backups/
+*.sql.gz
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Build output and dependencies
+node_modules/
+target/
+dist/
+.idea/
+*.iml

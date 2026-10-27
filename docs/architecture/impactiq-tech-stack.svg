@@ -1,0 +1,242 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="1040" viewBox="0 0 1700 1040" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/>
+    </marker>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2563eb"/><stop offset="0.5" stop-color="#3b82f6"/><stop offset="1" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="navy" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b1a45"/><stop offset="1" stop-color="#070f2b"/>
+    </linearGradient>
+    <style>
+      .title { font-size: 30px; font-weight: 800; fill: #0b1a45; }
+      .subtitle { font-size: 15px; fill: #64748b; }
+      .tierh { font-size: 18px; font-weight: 800; fill: #ffffff; }
+      .tiers { font-size: 12px; fill: #dbeafe; }
+      .h { font-size: 14px; font-weight: 700; fill: #0b1a45; }
+      .t { font-size: 12.5px; fill: #334155; }
+      .ver { font-size: 11.5px; font-weight: 700; fill: #1d4ed8; }
+      .lbl { font-size: 12px; font-weight: 700; fill: #1e3a8a; }
+      .lbls { font-size: 11.5px; fill: #475569; }
+      .tier { rx: 16; ry: 16; fill: #ffffff; stroke: #c7d7f5; stroke-width: 1.5; }
+      .chip { rx: 10; ry: 10; fill: #f5f8ff; stroke: #d6e1f5; stroke-width: 1; }
+      .line { stroke: #1d4ed8; stroke-width: 2.2; fill: none; marker-end: url(#arrow); }
+      .both { stroke: #1d4ed8; stroke-width: 2.2; fill: none; marker-end: url(#arrow); marker-start: url(#arrow); }
+      .dash { stroke: #64748b; stroke-width: 1.8; fill: none; stroke-dasharray: 6 5; marker-end: url(#arrow); }
+      .pill { rx: 11; ry: 11; fill: #ffffff; stroke: #93c5fd; stroke-width: 1.2; }
+    </style>
+  </defs>
+
+  <rect width="1700" height="1040" fill="#f4f7fd"/>
+  <text x="40" y="54" class="title">ImpactIQ — Technology Stack &amp; Connections</text>
+  <text x="40" y="80" class="subtitle">How each layer talks to the next: browser → React SPA → Spring Boot API → MariaDB / Google Gemini</text>
+
+  <!-- ================= 1. CLIENT ================= -->
+  <rect x="40" y="120" width="230" height="560" class="tier"/>
+  <rect x="40" y="120" width="230" height="64" rx="16" fill="url(#navy)"/>
+  <rect x="40" y="160" width="230" height="24" fill="url(#navy)"/>
+  <text x="60" y="150" class="tierh">1 · Client</text>
+  <text x="60" y="170" class="tiers">End users (Admin / Reporter)</text>
+
+  <rect x="58" y="204" width="194" height="74" class="chip"/>
+  <text x="72" y="230" class="h">Web browser</text>
+  <text x="72" y="250" class="t">Chrome / Edge</text>
+  <text x="72" y="267" class="t">Desktop &amp; mobile layout</text>
+
+  <rect x="58" y="292" width="194" height="92" class="chip"/>
+  <text x="72" y="318" class="h">Session security</text>
+  <text x="72" y="338" class="t">JSESSIONID cookie</text>
+  <text x="72" y="355" class="t">XSRF-TOKEN cookie →</text>
+  <text x="72" y="372" class="t">X-XSRF-TOKEN header</text>
+
+  <rect x="58" y="398" width="194" height="74" class="chip"/>
+  <text x="72" y="424" class="h">UI font</text>
+  <text x="72" y="444" class="t">Plus Jakarta Sans</text>
+  <text x="72" y="461" class="t">(Google Fonts CDN)</text>
+
+  <!-- ================= 2. FRONTEND ================= -->
+  <rect x="330" y="120" width="380" height="560" class="tier"/>
+  <rect x="330" y="120" width="380" height="64" rx="16" fill="url(#brand)"/>
+  <rect x="330" y="160" width="380" height="24" fill="url(#brand)"/>
+  <text x="350" y="150" class="tierh">2 · Frontend (SPA)</text>
+  <text x="350" y="170" class="tiers">frontend/ · dev server on :5173</text>
+
+  <rect x="348" y="204" width="168" height="66" class="chip"/>
+  <text x="362" y="228" class="h">React</text><text x="460" y="228" class="ver">19.1</text>
+  <text x="362" y="248" class="t">UI components</text>
+  <text x="362" y="263" class="t">+ hooks</text>
+
+  <rect x="526" y="204" width="166" height="66" class="chip"/>
+  <text x="540" y="228" class="h">Vite</text><text x="640" y="228" class="ver">7.1</text>
+  <text x="540" y="248" class="t">Build + dev server</text>
+  <text x="540" y="263" class="t">proxy /api → :8080</text>
+
+  <rect x="348" y="282" width="168" height="66" class="chip"/>
+  <text x="362" y="306" class="h">React Router</text><text x="470" y="306" class="ver">7.9</text>
+  <text x="362" y="326" class="t">Pages &amp; protected</text>
+  <text x="362" y="341" class="t">routes</text>
+
+  <rect x="526" y="282" width="166" height="66" class="chip"/>
+  <text x="540" y="306" class="h">Axios</text><text x="640" y="306" class="ver">1.12</text>
+  <text x="540" y="326" class="t">services/api.js</text>
+  <text x="540" y="341" class="t">REST client + CSRF</text>
+
+  <rect x="348" y="360" width="168" height="66" class="chip"/>
+  <text x="362" y="384" class="h">Tailwind CSS</text><text x="470" y="384" class="ver">4.1</text>
+  <text x="362" y="404" class="t">+ custom blue theme</text>
+  <text x="362" y="419" class="t">(theme.css)</text>
+
+  <rect x="526" y="360" width="166" height="66" class="chip"/>
+  <text x="540" y="384" class="h">Recharts</text><text x="640" y="384" class="ver">3.10</text>
+  <text x="540" y="404" class="t">Dashboard charts</text>
+  <text x="540" y="419" class="t">&amp; trends</text>
+
+  <rect x="348" y="438" width="168" height="66" class="chip"/>
+  <text x="362" y="462" class="h">react-markdown</text><text x="482" y="462" class="ver">10.1</text>
+  <text x="362" y="482" class="t">+ remark-gfm</text>
+  <text x="362" y="497" class="t">AI chat answers</text>
+
+  <rect x="526" y="438" width="166" height="66" class="chip"/>
+  <text x="540" y="462" class="h">lucide-react</text>
+  <text x="540" y="482" class="t">Icon set</text>
+
+  <rect x="348" y="522" width="344" height="140" rx="12" fill="#eef4ff" stroke="#bfd3f6"/>
+  <text x="362" y="546" class="h">Pages</text>
+  <text x="362" y="568" class="t">Login / Register · Dashboard · Defect register</text>
+  <text x="362" y="586" class="t">New / Edit defect · Defect detail + AI investigation</text>
+  <text x="362" y="604" class="t">AI Chatbot · Projects · Project Knowledge (admin)</text>
+  <text x="362" y="630" class="lbls">Tests: Vitest 3.2 + Testing Library + jsdom</text>
+  <text x="362" y="648" class="lbls">Build output: frontend/dist (static files)</text>
+
+  <!-- ================= 3. BACKEND ================= -->
+  <rect x="770" y="120" width="500" height="760" class="tier"/>
+  <rect x="770" y="120" width="500" height="64" rx="16" fill="url(#navy)"/>
+  <rect x="770" y="160" width="500" height="24" fill="url(#navy)"/>
+  <text x="790" y="150" class="tierh">3 · Backend API</text>
+  <text x="790" y="170" class="tiers">backend/ · Spring Boot 3.5.6 · Java 21 · Maven · REST on :8080</text>
+
+  <!-- request pipeline -->
+  <rect x="788" y="204" width="464" height="60" class="chip"/>
+  <text x="802" y="228" class="h">Spring Security</text>
+  <text x="802" y="248" class="t">Session login · BCrypt passwords · Cookie CSRF · role checks (ADMIN / USER)</text>
+
+  <rect x="788" y="276" width="464" height="60" class="chip"/>
+  <text x="802" y="300" class="h">Spring Web MVC — REST controllers</text>
+  <text x="802" y="320" class="t">/api/auth · /api/defects · /api/projects · /api/chat · /api/dashboard · /api/users</text>
+
+  <rect x="788" y="348" width="464" height="60" class="chip"/>
+  <text x="802" y="372" class="h">Service layer + Bean Validation</text>
+  <text x="802" y="392" class="t">Defects · Impact scoring · Access control · Projects · Knowledge · Chat</text>
+
+  <!-- AI block -->
+  <rect x="788" y="420" width="464" height="232" rx="12" fill="#eef4ff" stroke="#bfd3f6"/>
+  <text x="802" y="444" class="h">AI layer</text>
+  <rect x="802" y="456" width="214" height="86" class="chip" fill="#ffffff"/>
+  <text x="814" y="478" class="h">Google ADK</text><text x="914" y="478" class="ver">1.11.0</text>
+  <text x="814" y="498" class="t">6-agent investigation</text>
+  <text x="814" y="514" class="t">(LlmAgent runtime)</text>
+  <text x="814" y="530" class="t">+ Chat assistant agent</text>
+  <rect x="1026" y="456" width="212" height="86" class="chip" fill="#ffffff"/>
+  <text x="1038" y="478" class="h">google-genai SDK</text><text x="1170" y="478" class="ver">1.75</text>
+  <text x="1038" y="498" class="t">AI defect drafts</text>
+  <text x="1038" y="514" class="t">Embeddings</text>
+  <text x="1038" y="530" class="t">Component discovery</text>
+  <rect x="802" y="552" width="436" height="88" class="chip" fill="#ffffff"/>
+  <text x="814" y="574" class="h">RAG knowledge engine (in JVM)</text>
+  <text x="814" y="594" class="t">Apache PDFBox 3.0.6 → text chunks → embeddings</text>
+  <text x="814" y="611" class="t">Hybrid search: BM25 + cosine similarity</text>
+  <text x="814" y="628" class="t">Grounds investigations and chatbot answers</text>
+
+  <rect x="788" y="664" width="464" height="60" class="chip"/>
+  <text x="802" y="688" class="h">Spring Data JPA (Hibernate)</text>
+  <text x="802" y="708" class="t">Entities + repositories · mysql-connector-j (JDBC)</text>
+
+  <rect x="788" y="736" width="464" height="126" rx="12" fill="#f8fafc" stroke="#d6e1f5" stroke-dasharray="5 4"/>
+  <text x="802" y="760" class="h">Testing</text>
+  <text x="802" y="780" class="t">JUnit 5 + Spring Boot Test + spring-security-test</text>
+  <text x="802" y="798" class="t">H2 in-memory DB (tests never touch impactiq_db)</text>
+  <text x="802" y="816" class="t">Scripted AI models — no live Gemini calls in tests</text>
+  <text x="802" y="834" class="t">E2E harness on :8081 + Vite :5174</text>
+  <text x="802" y="852" class="lbls">Config: GEMINI_API_KEY + DB credentials from environment (.env)</text>
+
+  <!-- internal arrows -->
+  <path d="M1020,264 L1020,276" class="line"/>
+  <path d="M1020,336 L1020,348" class="line"/>
+  <path d="M1020,408 L1020,420" class="line"/>
+  <path d="M1020,652 L1020,664" class="line"/>
+
+  <!-- ================= 4. DATA ================= -->
+  <rect x="1330" y="120" width="330" height="330" class="tier"/>
+  <rect x="1330" y="120" width="330" height="64" rx="16" fill="url(#brand)"/>
+  <rect x="1330" y="160" width="330" height="24" fill="url(#brand)"/>
+  <text x="1350" y="150" class="tierh">4 · Database</text>
+  <text x="1350" y="170" class="tiers">XAMPP · localhost:3306</text>
+
+  <rect x="1348" y="204" width="294" height="74" class="chip"/>
+  <text x="1362" y="228" class="h">MariaDB / MySQL</text>
+  <text x="1362" y="248" class="t">Schema: impactiq_db</text>
+  <text x="1362" y="265" class="t">Managed in phpMyAdmin</text>
+
+  <rect x="1348" y="290" width="294" height="142" class="chip"/>
+  <text x="1362" y="314" class="h">Main tables</text>
+  <text x="1362" y="334" class="t">users · projects · project_members</text>
+  <text x="1362" y="352" class="t">defects · impact analyses · investigations</text>
+  <text x="1362" y="370" class="t">components · knowledge docs + chunks</text>
+  <text x="1362" y="388" class="t">(embeddings stored as BLOB)</text>
+  <text x="1362" y="406" class="t">chat_conversations · chat_messages</text>
+  <text x="1362" y="424" class="lbls">SQL migrations: backend/db/migrations</text>
+
+  <!-- ================= 5. EXTERNAL AI ================= -->
+  <rect x="1330" y="500" width="330" height="240" class="tier"/>
+  <rect x="1330" y="500" width="330" height="64" rx="16" fill="url(#navy)"/>
+  <rect x="1330" y="540" width="330" height="24" fill="url(#navy)"/>
+  <text x="1350" y="530" class="tierh">5 · Google Gemini API</text>
+  <text x="1350" y="550" class="tiers">Cloud · HTTPS · API key</text>
+
+  <rect x="1348" y="584" width="294" height="62" class="chip"/>
+  <text x="1362" y="608" class="h">gemini-3.1-flash-lite</text>
+  <text x="1362" y="628" class="t">Agents, chat, drafts, discovery</text>
+
+  <rect x="1348" y="658" width="294" height="62" class="chip"/>
+  <text x="1362" y="682" class="h">gemini-embedding-001</text>
+  <text x="1362" y="702" class="t">Vectors for RAG search</text>
+
+  <!-- ================= CONNECTIONS ================= -->
+  <!-- Browser <-> Frontend -->
+  <path d="M252,241 L346,241" class="both"/>
+  <rect x="262" y="203" width="74" height="22" class="pill"/>
+  <text x="270" y="218" class="lbl">HTTP :5173</text>
+
+  <!-- Frontend -> Backend -->
+  <path d="M692,315 C730,315 740,306 786,306" class="both"/>
+  <rect x="698" y="258" width="86" height="40" class="pill"/>
+  <text x="710" y="275" class="lbl">REST/JSON</text>
+  <text x="708" y="290" class="lbls">/api → :8080</text>
+
+  <!-- Backend -> DB -->
+  <path d="M1252,694 C1300,694 1296,360 1346,360" class="both"/>
+  <rect x="1270" y="470" width="58" height="38" class="pill"/>
+  <text x="1280" y="486" class="lbl">JDBC</text>
+  <text x="1278" y="501" class="lbls">:3306</text>
+
+  <!-- Backend -> Gemini -->
+  <path d="M1238,500 C1290,500 1296,615 1346,615" class="line"/>
+  <path d="M1238,498 C1300,498 1300,689 1346,689" class="line"/>
+  <rect x="1258" y="548" width="66" height="38" class="pill"/>
+  <text x="1268" y="564" class="lbl">HTTPS</text>
+  <text x="1268" y="579" class="lbls">REST API</text>
+
+  <!-- Font CDN -->
+  <path d="M155,472 L155,520" class="dash"/>
+  <text x="62" y="540" class="lbls">fonts.googleapis.com (optional,</text>
+  <text x="62" y="556" class="lbls">falls back to Segoe UI offline)</text>
+
+  <!-- ================= LEGEND / FLOW ================= -->
+  <rect x="40" y="910" width="1620" height="104" rx="14" fill="#ffffff" stroke="#c7d7f5"/>
+  <text x="62" y="938" class="h">Typical request flow</text>
+  <text x="62" y="962" class="t">① User acts in the React page → ② Axios calls /api/... with session cookie + CSRF header → ③ Vite proxies to Spring Boot :8080 → ④ Spring Security checks login + role</text>
+  <text x="62" y="984" class="t">⑤ Service reads/writes impactiq_db via JPA/JDBC → ⑥ for AI features, ADK agents / genai SDK pull RAG context and call Gemini over HTTPS → ⑦ JSON result rendered in React</text>
+  <path d="M1300,948 L1350,948" class="line"/><text x="1360" y="952" class="lbls">request / response</text>
+  <path d="M1300,976 L1350,976" class="dash"/><text x="1360" y="980" class="lbls">external / optional</text>
+</svg>

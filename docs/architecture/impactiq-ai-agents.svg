@@ -1,0 +1,426 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1600" viewBox="0 0 1900 1600" font-family="Segoe UI, Arial, sans-serif">
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/></marker>
+  <marker id="arrowg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+  <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563eb"/><stop offset=".5" stop-color="#3b82f6"/><stop offset="1" stop-color="#38bdf8"/></linearGradient>
+  <linearGradient id="navy" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1a45"/><stop offset="1" stop-color="#070f2b"/></linearGradient>
+  <linearGradient id="indigo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4338ca"/><stop offset="1" stop-color="#6366f1"/></linearGradient>
+  <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0369a1"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient>
+  <style>
+    .title{font-size:31px;font-weight:800;fill:#0b1a45}
+    .subtitle{font-size:15px;fill:#64748b}
+    .tierh{font-size:18px;font-weight:800;fill:#fff}
+    .tiers{font-size:12px;fill:#dbeafe}
+    .h{font-size:13.5px;font-weight:700;fill:#0b1a45}
+    .h2{font-size:14.5px;font-weight:800;fill:#0b1a45}
+    .t{font-size:12px;fill:#334155}
+    .o{font-size:12px;font-weight:600;fill:#1d4ed8}
+    .num{font-size:12px;font-weight:800;fill:#fff}
+    .tag{font-size:10.5px;font-weight:700;letter-spacing:.3px}
+    .lbl{font-size:11.5px;font-weight:700;fill:#1e3a8a}
+    .lbls{font-size:11px;fill:#475569}
+    .tier{rx:16;ry:16;fill:#fff;stroke:#c7d7f5;stroke-width:1.5}
+    .pill{fill:#fff;stroke:#93c5fd;stroke-width:1.2}
+    .line{stroke:#1d4ed8;stroke-width:2;fill:none;marker-end:url(#arrow)}
+    .dash{stroke:#64748b;stroke-width:1.7;fill:none;stroke-dasharray:6 5;marker-end:url(#arrowg)}
+    .th{font-size:11.5px;font-weight:700;fill:#475569}
+  </style>
+</defs>
+<rect width="1900" height="1600" fill="#f4f7fd"/>
+<text x="40" y="54" class="title">ImpactIQ — AI Agents, Gemini &amp; Result Analysis</text>
+<text x="40" y="80" class="subtitle">Google ADK 1.11 multi-agent investigation · Gemini gemini-3.1-flash-lite · RAG with gemini-embedding-001 · deterministic scoring + AI review</text>
+<rect x="40" y="110" width="1820" height="250" class="tier"/>
+<path d="M40,166 V126 Q40,110 56,110 H1844 Q1860,110 1860,126 V166 Z" fill="url(#cyan)"/>
+<text x="60" y="138" class="tierh">A · Knowledge ingestion (RAG indexing pipeline)</text>
+<text x="60" y="157" class="tiers">Admin uploads project documents → async documentExecutor → searchable knowledge for every agent and the chatbot</text>
+<rect x="58" y="184" width="208" height="158" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<text x="70" y="211" class="h">Upload document</text>
+<rect x="70" y="222" width="97.2" height="18" rx="9" fill="#e0e7ff"/>
+<text x="77" y="235" class="tag" fill="#4338ca">ADMIN · ASYNC</text>
+<text x="70" y="260" class="t">Project Knowledge page</text>
+<text x="70" y="277" class="t">pdf · txt · log · md · json</text>
+<text x="70" y="294" class="t">+ code / config files</text>
+<text x="70" y="311" class="t">version → PENDING</text>
+<path d="M267,263 L281,263" class="line"/>
+<rect x="282" y="184" width="208" height="158" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<text x="294" y="211" class="h">FileValidationService</text>
+<rect x="294" y="222" width="97.2" height="18" rx="9" fill="#e2e8f0"/>
+<text x="301" y="235" class="tag" fill="#334155">DETERMINISTIC</text>
+<text x="294" y="260" class="t">≤ 10 MB, allowed types</text>
+<text x="294" y="277" class="t">PDF magic bytes %PDF-</text>
+<text x="294" y="294" class="t">strict UTF-8, no NUL</text>
+<text x="294" y="311" class="t">SHA-256 checksum</text>
+<path d="M491,263 L505,263" class="line"/>
+<rect x="506" y="184" width="208" height="158" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<text x="518" y="211" class="h">TextExtractionService</text>
+<rect x="518" y="222" width="135.60000000000002" height="18" rx="9" fill="#e2e8f0"/>
+<text x="525" y="235" class="tag" fill="#334155">APACHE PDFBOX 3.0.6</text>
+<text x="518" y="260" class="t">page-by-page extraction</text>
+<text x="518" y="277" class="t">≤ 300 pages, ≤ 2M chars</text>
+<text x="518" y="294" class="t">no OCR: scanned or</text>
+<text x="518" y="311" class="t">encrypted PDF rejected</text>
+<path d="M715,263 L729,263" class="line"/>
+<rect x="730" y="184" width="208" height="158" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<text x="742" y="211" class="h">Safety filters</text>
+<rect x="742" y="222" width="71.6" height="18" rx="9" fill="#e2e8f0"/>
+<text x="749" y="235" class="tag" fill="#334155">GUARDRAIL</text>
+<text x="742" y="260" class="t">SecretRedactor: API keys,</text>
+<text x="742" y="277" class="t">tokens, JWT, passwords</text>
+<text x="742" y="294" class="t">PromptInjectionDetector:</text>
+<text x="742" y="311" class="t">7 rules → suspicious flag</text>
+<path d="M939,263 L953,263" class="line"/>
+<rect x="954" y="184" width="208" height="158" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<text x="966" y="211" class="h">ChunkingService</text>
+<rect x="966" y="222" width="97.2" height="18" rx="9" fill="#e2e8f0"/>
+<text x="973" y="235" class="tag" fill="#334155">DETERMINISTIC</text>
+<text x="966" y="260" class="t">line-aware chunks</text>
+<text x="966" y="277" class="t">~1500 chars (min 200)</text>
+<text x="966" y="294" class="t">2-line overlap</text>
+<text x="966" y="311" class="t">keeps page + line refs</text>
+<path d="M1163,263 L1177,263" class="line"/>
+<rect x="1178" y="184" width="208" height="158" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<text x="1190" y="211" class="h">EmbeddingService</text>
+<rect x="1190" y="222" width="116.4" height="18" rx="9" fill="#dbeafe"/>
+<text x="1197" y="235" class="tag" fill="#1d4ed8">GEMINI EMBEDDING</text>
+<text x="1190" y="260" class="t">gemini-embedding-001</text>
+<text x="1190" y="277" class="t">768-dim, L2-normalised</text>
+<text x="1190" y="294" class="t">batches of 50</text>
+<text x="1190" y="311" class="t">fail → LEXICAL_ONLY</text>
+<path d="M1387,263 L1401,263" class="line"/>
+<rect x="1402" y="184" width="208" height="158" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<text x="1414" y="211" class="h">MariaDB storage</text>
+<rect x="1414" y="222" width="84.4" height="18" rx="9" fill="#e2e8f0"/>
+<text x="1421" y="235" class="tag" fill="#334155">impactiq_db</text>
+<text x="1414" y="260" class="t">chunks + metadata</text>
+<text x="1414" y="277" class="t">vector → float32 BLOB</text>
+<text x="1414" y="294" class="t">(VectorCodec)</text>
+<text x="1414" y="311" class="t">status → INDEXED</text>
+<path d="M1611,263 L1625,263" class="line"/>
+<rect x="1626" y="184" width="208" height="158" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<text x="1638" y="211" class="h">ComponentDiscoveryAgent</text>
+<rect x="1638" y="222" width="84.4" height="18" rx="9" fill="#dbeafe"/>
+<text x="1645" y="235" class="tag" fill="#1d4ed8">LLM · EVENT</text>
+<text x="1638" y="260" class="t">on DocumentIndexedEvent</text>
+<text x="1638" y="277" class="t">proposes ≤ 15 components</text>
+<text x="1638" y="294" class="t">name must appear in a</text>
+<text x="1638" y="311" class="t">cited source · ≤ 8 / run</text>
+<rect x="40" y="390" width="1820" height="570" class="tier"/>
+<path d="M40,446 V406 Q40,390 56,390 H1844 Q1860,390 1860,406 V446 Z" fill="url(#navy)"/>
+<text x="60" y="418" class="tierh">B · AI defect investigation — 6 stages, run strictly in sequence (InvestigationOrchestrator)</text>
+<text x="60" y="437" class="tiers">Triggered from Defect detail → InvestigationService queues the run (2 worker threads, 1 active run per defect, max 4 active) → each stage saved as an InvestigationStep</text>
+<rect x="58" y="468" width="208" height="214" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<circle cx="81" cy="490" r="12" fill="url(#brand)"/>
+<text x="81" y="494.5" class="num" text-anchor="middle">0</text>
+<text x="100" y="495" class="h">Trigger + score</text>
+<rect x="70" y="506" width="97.2" height="18" rx="9" fill="#e2e8f0"/>
+<text x="77" y="519" class="tag" fill="#334155">DETERMINISTIC</text>
+<text x="70" y="544" class="t">User clicks Investigate</text>
+<text x="70" y="561" class="t">ImpactScoringService →</text>
+<text x="70" y="578" class="t">baseline score, risk,</text>
+<text x="70" y="595" class="t">priority (never changed</text>
+<text x="70" y="612" class="t">by any AI agent)</text>
+<text x="70" y="629" class="o">→ DefectSnapshot</text>
+<text x="70" y="646" class="o">→ secrets redacted</text>
+<path d="M267,575 L281,575" class="line"/>
+<rect x="282" y="468" width="208" height="214" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<circle cx="305" cy="490" r="12" fill="url(#brand)"/>
+<text x="305" y="494.5" class="num" text-anchor="middle">1</text>
+<text x="324" y="495" class="h">project_context</text>
+<rect x="294" y="506" width="90.80000000000001" height="18" rx="9" fill="#cffafe"/>
+<text x="301" y="519" class="tag" fill="#0e7490">RAG · NO LLM</text>
+<text x="294" y="544" class="t">ProjectContextAgent</text>
+<text x="294" y="561" class="t">query = title + desc +</text>
+<text x="294" y="578" class="t">error / exception lines</text>
+<text x="294" y="595" class="t">hybrid search, top 6:</text>
+<text x="294" y="612" class="t">0.65·cosine + 0.35·BM25</text>
+<text x="294" y="629" class="o">→ K1…K6 knowledge items</text>
+<path d="M491,575 L505,575" class="line"/>
+<rect x="506" y="468" width="208" height="214" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<circle cx="529" cy="490" r="12" fill="url(#brand)"/>
+<text x="529" y="494.5" class="num" text-anchor="middle">2</text>
+<text x="548" y="495" class="h">Evidence catalog</text>
+<rect x="518" y="506" width="58.800000000000004" height="18" rx="9" fill="#e2e8f0"/>
+<text x="525" y="519" class="tag" fill="#334155">BUILDER</text>
+<text x="518" y="544" class="t">D1 = defect report</text>
+<text x="518" y="561" class="t">E# = attached evidence</text>
+<text x="518" y="578" class="t">K# = knowledge chunks</text>
+<text x="518" y="595" class="t">≤ 6000 chars each,</text>
+<text x="518" y="612" class="t">60k chars total</text>
+<text x="518" y="629" class="o">→ suspicious flags</text>
+<text x="518" y="646" class="o">→ SHA-256 fingerprint</text>
+<path d="M715,575 L729,575" class="line"/>
+<rect x="730" y="468" width="208" height="214" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<circle cx="753" cy="490" r="12" fill="url(#brand)"/>
+<text x="753" y="494.5" class="num" text-anchor="middle">3</text>
+<text x="772" y="495" class="h">defect_triage</text>
+<rect x="742" y="506" width="129.2" height="18" rx="9" fill="#dbeafe"/>
+<text x="749" y="519" class="tag" fill="#1d4ed8">LLM · NON-CRITICAL</text>
+<text x="742" y="544" class="t">DefectTriageAgent</text>
+<text x="742" y="561" class="t">classifies the defect</text>
+<text x="742" y="578" class="o">→ category (9 types)</text>
+<text x="742" y="595" class="o">→ summary</text>
+<text x="742" y="612" class="o">→ affected component</text>
+<text x="742" y="629" class="o">→ key signals</text>
+<text x="742" y="646" class="o">→ missing information</text>
+<path d="M939,575 L953,575" class="line"/>
+<rect x="954" y="468" width="208" height="214" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<circle cx="977" cy="490" r="12" fill="url(#brand)"/>
+<text x="977" y="494.5" class="num" text-anchor="middle">4</text>
+<text x="996" y="495" class="h">evidence_analysis</text>
+<rect x="966" y="506" width="129.2" height="18" rx="9" fill="#dbeafe"/>
+<text x="973" y="519" class="tag" fill="#1d4ed8">LLM · NON-CRITICAL</text>
+<text x="966" y="544" class="t">EvidenceAnalysisAgent</text>
+<text x="966" y="561" class="t">reads D1 / E# / K#</text>
+<text x="966" y="578" class="o">→ ≤ 15 findings:</text>
+<text x="966" y="595" class="t">  evidenceId, observation,</text>
+<text x="966" y="612" class="t">  significance, location</text>
+<text x="966" y="629" class="o">→ evidence gaps</text>
+<path d="M1163,575 L1177,575" class="line"/>
+<rect x="1178" y="468" width="208" height="214" rx="12" fill="#fff7f7" stroke="#fecaca"/>
+<circle cx="1201" cy="490" r="12" fill="url(#brand)"/>
+<text x="1201" y="494.5" class="num" text-anchor="middle">5</text>
+<text x="1220" y="495" class="h">root_cause_analysis</text>
+<rect x="1190" y="506" width="103.60000000000001" height="18" rx="9" fill="#fee2e2"/>
+<text x="1197" y="519" class="tag" fill="#b91c1c">LLM · CRITICAL</text>
+<text x="1190" y="544" class="t">RootCauseAnalysisAgent</text>
+<text x="1190" y="561" class="o">→ ≤ 5 hypotheses</text>
+<text x="1190" y="578" class="t">  likelihood + confidence</text>
+<text x="1190" y="595" class="t">  supporting / conflicting</text>
+<text x="1190" y="612" class="t">  evidence IDs + reasoning</text>
+<text x="1190" y="629" class="t">no evidence → dropped</text>
+<text x="1190" y="646" class="t">server re-ranks results</text>
+<path d="M1387,575 L1401,575" class="line"/>
+<rect x="1402" y="468" width="208" height="214" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<circle cx="1425" cy="490" r="12" fill="url(#brand)"/>
+<text x="1425" y="494.5" class="num" text-anchor="middle">6</text>
+<text x="1444" y="495" class="h">fix_recommendation</text>
+<rect x="1414" y="506" width="33.2" height="18" rx="9" fill="#dbeafe"/>
+<text x="1421" y="519" class="tag" fill="#1d4ed8">LLM</text>
+<text x="1414" y="544" class="t">FixRecommendationAgent</text>
+<text x="1414" y="561" class="t">skipped if no root cause</text>
+<text x="1414" y="578" class="o">→ ≤ 10 fix steps + risk</text>
+<text x="1414" y="595" class="o">→ ≤ 8 verification tests</text>
+<text x="1414" y="612" class="o">→ ≤ 8 regression tests</text>
+<text x="1414" y="629" class="o">→ extra evidence needed</text>
+<path d="M1611,575 L1625,575" class="line"/>
+<rect x="1626" y="468" width="208" height="214" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<circle cx="1649" cy="490" r="12" fill="url(#brand)"/>
+<text x="1649" y="494.5" class="num" text-anchor="middle">7</text>
+<text x="1668" y="495" class="h">root_orchestrator</text>
+<rect x="1638" y="506" width="129.2" height="18" rx="9" fill="#e2e8f0"/>
+<text x="1645" y="519" class="tag" fill="#334155">ASSEMBLER · NO LLM</text>
+<text x="1638" y="544" class="t">builds InvestigationReport</text>
+<text x="1638" y="561" class="t">status:</text>
+<text x="1638" y="578" class="t"> COMPLETED – all stages ok</text>
+<text x="1638" y="595" class="t"> PARTIAL – a stage failed</text>
+<text x="1638" y="612" class="t"> FAILED – no root cause</text>
+<text x="1638" y="629" class="o">→ limitations, warnings</text>
+<text x="1638" y="646" class="o">→ engine, model, time</text>
+<rect x="730" y="728" width="880" height="210" rx="14" fill="#eef4ff" stroke="#bfd3f6"/>
+<text x="746" y="752" class="h2">Model layer — every LLM call goes through the same path</text>
+<path d="M834,684 L834,726" class="line"/>
+<path d="M1058,684 L1058,726" class="line"/>
+<path d="M1282,684 L1282,726" class="line"/>
+<path d="M1506,684 L1506,726" class="line"/>
+<rect x="842" y="694" width="190.8" height="22" rx="11" class="pill"/>
+<text x="851" y="709" class="lbl">structured JSON in / out</text>
+<rect x="746" y="766" width="200" height="158" rx="12" fill="#ffffff" stroke="#d6e1f5"/>
+<text x="758" y="793" class="h">StructuredAgentInvoker</text>
+<text x="758" y="814" class="t">PromptSupport: role + task</text>
+<text x="758" y="831" class="t">+ 8 security rules</text>
+<text x="758" y="848" class="t">data in &lt;untrusted_data&gt;</text>
+<text x="758" y="865" class="t">retry ×2 (1.5 s backoff)</text>
+<text x="758" y="882" class="t">90 s / call · 240 s / run</text>
+<path d="M947,845 L965,845" class="line"/>
+<rect x="966" y="766" width="200" height="158" rx="12" fill="#ffffff" stroke="#d6e1f5"/>
+<text x="978" y="793" class="h">Engine switch</text>
+<text x="978" y="814" class="t">IMPACTIQ_AGENT_ENGINE</text>
+<text x="978" y="831" class="t">adk (default):</text>
+<text x="978" y="848" class="t"> AdkAgentModelClient</text>
+<text x="978" y="865" class="t"> LlmAgent + InMemoryRunner</text>
+<text x="978" y="882" class="t"> outputSchema · temp 0.2</text>
+<text x="978" y="899" class="t">gemini: direct genai SDK</text>
+<path d="M1167,845 L1185,845" class="line"/>
+<rect x="1186" y="766" width="200" height="158" rx="12" fill="#dbeafe" stroke="#2563eb"/>
+<text x="1198" y="793" class="h">Google Gemini API</text>
+<text x="1198" y="814" class="t">gemini-3.1-flash-lite</text>
+<text x="1198" y="831" class="t">HTTPS · API key from env</text>
+<text x="1198" y="848" class="t">max 4096 output tokens</text>
+<text x="1198" y="865" class="t">JSON-schema response</text>
+<text x="1198" y="882" class="t">store(false)</text>
+<path d="M1387,845 L1405,845" class="line"/>
+<rect x="1406" y="766" width="200" height="158" rx="12" fill="#ffffff" stroke="#d6e1f5"/>
+<text x="1418" y="793" class="h">Validate + sanitise</text>
+<text x="1418" y="814" class="t">strip code fences</text>
+<text x="1418" y="831" class="t">Jackson → contract record</text>
+<text x="1418" y="848" class="t">OutputSanitizer: caps,</text>
+<text x="1418" y="865" class="t">enum fallback, clamp,</text>
+<text x="1418" y="882" class="t">drop unknown citations</text>
+<rect x="58" y="728" width="656" height="210" rx="14" fill="#f8fafc" stroke="#d6e1f5"/>
+<text x="74" y="752" class="h2">Run control, failures &amp; retries</text>
+<text x="74" y="778" class="t">Errors retried per call: RATE_LIMITED, MODEL_UNAVAILABLE, MODEL_TIMEOUT, INVALID_OUTPUT</text>
+<text x="74" y="796" class="t">MISSING_API_KEY / AUTH_FAILED / RUN_TIMEOUT → remaining model stages skipped</text>
+<text x="74" y="814" class="t">Non-critical stage fails → run continues → PARTIAL</text>
+<text x="74" y="832" class="t">Root cause fails → FAILED (no hypotheses to fix)</text>
+<text x="74" y="850" class="t">Re-run allowed for FAILED / PARTIAL, up to 3 attempts per defect</text>
+<text x="74" y="868" class="t">Stage output reused from the parent run when fingerprint matches</text>
+<text x="74" y="886" class="t">Persisted: investigations.reportJson + investigation_steps</text>
+<text x="74" y="904" class="t">  (status, attempts, duration, outputJson, error category)</text>
+<text x="74" y="922" class="t">No live Gemini in tests: scripted model clients + H2</text>
+<path d="M1730,684 L1730,726" class="line"/>
+<rect x="1626" y="728" width="208" height="210" rx="12" fill="#f5f3ff" stroke="#ddd6fe"/>
+<text x="1638" y="755" class="h">Human review</text>
+<rect x="1638" y="766" width="116.4" height="18" rx="9" fill="#e0e7ff"/>
+<text x="1645" y="779" class="tag" fill="#4338ca">REPORTER / ADMIN</text>
+<text x="1638" y="804" class="t">Report shown on Defect</text>
+<text x="1638" y="821" class="t">detail page (hypotheses</text>
+<text x="1638" y="838" class="t">always UNCONFIRMED)</text>
+<text x="1638" y="855" class="t">Feedback per hypothesis:</text>
+<text x="1638" y="872" class="t">CONFIRMED · REJECTED ·</text>
+<text x="1638" y="889" class="t">HELPFUL …</text>
+<text x="1638" y="906" class="o">→ dashboard metrics</text>
+<text x="1638" y="923" class="o">→ chatbot evidence I#</text>
+<rect x="40" y="990" width="600" height="430" class="tier"/>
+<path d="M40,1046 V1006 Q40,990 56,990 H624 Q640,990 640,1006 V1046 Z" fill="url(#brand)"/>
+<text x="60" y="1018" class="tierh">C · How the impact result is analysed</text>
+<text x="60" y="1037" class="tiers">Deterministic baseline first, AI only suggests — both stored side by side</text>
+<text x="60" y="1074" class="h2">ImpactScoringService (deterministic)</text>
+<rect x="60" y="1086" width="560" height="24" rx="6" fill="#eef4ff"/>
+<text x="70" y="1102" class="th">Factor</text>
+<text x="270" y="1102" class="th">Weight</text>
+<text x="370" y="1102" class="th">Level → points</text>
+<text x="70" y="1128" class="t">Affected users</text>
+<text x="270" y="1128" class="o">25</text>
+<text x="370" y="1128" class="t">≤10:25 · ≤100:50 · ≤1000:75 · more:100</text>
+<text x="70" y="1148" class="t">Business criticality</text>
+<text x="270" y="1148" class="o">25</text>
+<text x="370" y="1148" class="t">LOW 25 · MED 50 · HIGH 75 · CRIT 100</text>
+<text x="70" y="1168" class="t">Customer impact</text>
+<text x="270" y="1168" class="o">20</text>
+<text x="370" y="1168" class="t">same 25 / 50 / 75 / 100 scale</text>
+<text x="70" y="1188" class="t">Technical impact</text>
+<text x="270" y="1188" class="o">20</text>
+<text x="370" y="1188" class="t">same scale (missing = 0)</text>
+<text x="70" y="1208" class="t">Frequency</text>
+<text x="270" y="1208" class="o">10</text>
+<text x="370" y="1208" class="t">same scale</text>
+<text x="70" y="1240" class="o">Score = (Σ points × weight + 50) / 100   → 0 … 100</text>
+<rect x="60" y="1256" width="130" height="40" rx="10" fill="#e0f2fe"/>
+<text x="125" y="1272" class="tag" text-anchor="middle" fill="#0369a1">&lt; 30</text>
+<text x="125" y="1288" class="tag" text-anchor="middle" fill="#0369a1">LOW · P3</text>
+<rect x="200" y="1256" width="130" height="40" rx="10" fill="#fef3c7"/>
+<text x="265" y="1272" class="tag" text-anchor="middle" fill="#b45309">&lt; 60</text>
+<text x="265" y="1288" class="tag" text-anchor="middle" fill="#b45309">MEDIUM · P2</text>
+<rect x="340" y="1256" width="130" height="40" rx="10" fill="#ffedd5"/>
+<text x="405" y="1272" class="tag" text-anchor="middle" fill="#c2410c">&lt; 80</text>
+<text x="405" y="1288" class="tag" text-anchor="middle" fill="#c2410c">HIGH · P1</text>
+<rect x="480" y="1256" width="130" height="40" rx="10" fill="#fee2e2"/>
+<text x="545" y="1272" class="tag" text-anchor="middle" fill="#b91c1c">≥ 80</text>
+<text x="545" y="1288" class="tag" text-anchor="middle" fill="#b91c1c">CRITICAL · P0</text>
+<text x="60" y="1326" class="h2">ImpactAnalysisService (Gemini, AI-suggested score)</text>
+<text x="60" y="1348" class="t">Gets defect fields + baseline + breakdown → returns impactScore, risk,</text>
+<text x="60" y="1366" class="t">priority, confidence, summary, explanation, actions, affected areas</text>
+<text x="60" y="1384" class="t">Server checks score ↔ risk ↔ priority use the same bands</text>
+<text x="60" y="1402" class="t">Saved in impact_analyses next to baseline — never overrides it</text>
+<rect x="660" y="990" width="600" height="430" class="tier"/>
+<path d="M660,1046 V1006 Q660,990 676,990 H1244 Q1260,990 1260,1006 V1046 Z" fill="url(#indigo)"/>
+<text x="680" y="1018" class="tierh">D · AI Chatbot (ChatAssistantAgent)</text>
+<text x="680" y="1037" class="tiers">Grounded Q&amp;A on projects, defects, investigations and knowledge</text>
+<circle cx="692" cy="1072" r="10" fill="url(#indigo)"/>
+<text x="692" y="1076" class="num" text-anchor="middle">1</text>
+<text x="712" y="1076" class="h">User asks (≤ 4000 chars)</text>
+<text x="712" y="1093" class="t">redacted + injection-checked; 10 replies / user / min, 4 concurrent</text>
+<circle cx="692" cy="1108" r="10" fill="url(#indigo)"/>
+<text x="692" y="1112" class="num" text-anchor="middle">2</text>
+<text x="712" y="1112" class="h">Save USER + PENDING rows</text>
+<text x="712" y="1129" class="t">chat_conversations / chat_messages; access re-checked</text>
+<circle cx="692" cy="1144" r="10" fill="url(#indigo)"/>
+<text x="692" y="1148" class="num" text-anchor="middle">3</text>
+<text x="712" y="1148" class="h">Collect evidence</text>
+<text x="712" y="1165" class="t">D1 attached defect · I# latest investigation hypotheses</text>
+<text x="712" y="1184" class="t">K# knowledge via ProjectContextAgent (hybrid RAG)</text>
+<circle cx="692" cy="1199" r="10" fill="url(#indigo)"/>
+<text x="692" y="1203" class="num" text-anchor="middle">4</text>
+<text x="712" y="1203" class="h">Add history</text>
+<text x="712" y="1220" class="t">last 10 turns (20 messages), each ≤ 2000 chars</text>
+<circle cx="692" cy="1235" r="10" fill="url(#indigo)"/>
+<text x="692" y="1239" class="num" text-anchor="middle">5</text>
+<text x="712" y="1239" class="h">ChatAssistantAgent → Gemini</text>
+<text x="712" y="1256" class="t">ADK LlmAgent, JSON schema, 90 s timeout</text>
+<circle cx="692" cy="1271" r="10" fill="url(#indigo)"/>
+<text x="692" y="1275" class="num" text-anchor="middle">6</text>
+<text x="712" y="1275" class="h">Validate answer</text>
+<text x="712" y="1292" class="t">unknown citations removed; GROUNDED without</text>
+<text x="712" y="1311" class="t">citations → PARTIAL</text>
+<circle cx="692" cy="1326" r="10" fill="url(#indigo)"/>
+<text x="692" y="1330" class="num" text-anchor="middle">7</text>
+<text x="712" y="1330" class="h">Reply shown (Markdown)</text>
+<text x="712" y="1347" class="t">status: GROUNDED · PARTIAL · NOT_FOUND_IN_KNOWLEDGE ·</text>
+<text x="712" y="1366" class="t">NEEDS_CLARIFICATION + citations + ≤ 3 follow-ups</text>
+<text x="680" y="1402" class="lbls">Conversations kept 90 days · stale PENDING replies marked as errors on restart</text>
+<rect x="1280" y="990" width="580" height="430" class="tier"/>
+<path d="M1280,1046 V1006 Q1280,990 1296,990 H1844 Q1860,990 1860,1006 V1046 Z" fill="url(#cyan)"/>
+<text x="1300" y="1018" class="tierh">E · AI defect drafts &amp; dashboard insights</text>
+<text x="1300" y="1037" class="tiers">Helps users write defects and tracks AI quality</text>
+<rect x="1298" y="1062" width="544" height="160" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<text x="1310" y="1089" class="h">DefectDraftAgent (New defect page)</text>
+<rect x="1310" y="1100" width="231.60000000000002" height="18" rx="9" fill="#dbeafe"/>
+<text x="1317" y="1113" class="tag" fill="#1d4ed8">LLM · NOT SAVED UNTIL USER SUBMITS</text>
+<text x="1310" y="1138" class="t">Modes: QUICK text · PASTE logs · UPLOAD file (validated + extracted)</text>
+<text x="1310" y="1155" class="t">Input ≤ 50k chars, redacted, 60 s deadline</text>
+<text x="1310" y="1172" class="o">→ title, description, environment, service, function, users,</text>
+<text x="1310" y="1189" class="t">   4 impact signals, category, missing info, rationale</text>
+<text x="1310" y="1206" class="t">Gemini error → HEURISTIC draft (first error-like line as title)</text>
+<rect x="1298" y="1236" width="544" height="164" rx="12" fill="#f5f8ff" stroke="#d6e1f5"/>
+<text x="1310" y="1263" class="h">InvestigationMetricsService (Dashboard)</text>
+<rect x="1310" y="1274" width="238" height="18" rx="9" fill="#e2e8f0"/>
+<text x="1317" y="1287" class="tag" fill="#334155">DETERMINISTIC · PER USER VISIBILITY</text>
+<text x="1310" y="1312" class="t">Runs: total · active · COMPLETED · PARTIAL · FAILED</text>
+<text x="1310" y="1329" class="t">Retry-eligible (PARTIAL/FAILED, attempt &lt; 3) · pending review</text>
+<text x="1310" y="1346" class="t">Coverage: % defects with evidence · % investigated</text>
+<text x="1310" y="1363" class="t">Open HIGH / CRITICAL defects · recent / failed / high-risk lists</text>
+<text x="1310" y="1380" class="t">Each list shows hypothesis count + top hypothesis title</text>
+<rect x="40" y="1446" width="1820" height="128" rx="14" fill="#fff" stroke="#c7d7f5"/>
+<text x="60" y="1474" class="h2">Guardrails across all AI features</text>
+<rect x="60" y="1490" width="248" height="64" rx="10" fill="#f5f8ff" stroke="#d6e1f5"/>
+<rect x="60" y="1490" width="4" height="64" rx="2" fill="url(#brand)"/>
+<text x="76" y="1516" class="h">Secrets</text>
+<text x="76" y="1536" class="t">SecretRedactor before any prompt</text>
+<rect x="318" y="1490" width="248" height="64" rx="10" fill="#f5f8ff" stroke="#d6e1f5"/>
+<rect x="318" y="1490" width="4" height="64" rx="2" fill="url(#brand)"/>
+<text x="334" y="1516" class="h">Prompt injection</text>
+<text x="334" y="1536" class="t">untrusted data fenced + flagged</text>
+<rect x="576" y="1490" width="248" height="64" rx="10" fill="#f5f8ff" stroke="#d6e1f5"/>
+<rect x="576" y="1490" width="4" height="64" rx="2" fill="url(#brand)"/>
+<text x="592" y="1516" class="h">Structured output</text>
+<text x="592" y="1536" class="t">JSON schema + server validation</text>
+<rect x="834" y="1490" width="248" height="64" rx="10" fill="#f5f8ff" stroke="#d6e1f5"/>
+<rect x="834" y="1490" width="4" height="64" rx="2" fill="url(#brand)"/>
+<text x="850" y="1516" class="h">Citations</text>
+<text x="850" y="1536" class="t">only real D# / E# / K# / I# IDs</text>
+<rect x="1092" y="1490" width="248" height="64" rx="10" fill="#f5f8ff" stroke="#d6e1f5"/>
+<rect x="1092" y="1490" width="4" height="64" rx="2" fill="url(#brand)"/>
+<text x="1108" y="1516" class="h">Score safety</text>
+<text x="1108" y="1536" class="t">AI never changes the baseline</text>
+<rect x="1350" y="1490" width="248" height="64" rx="10" fill="#f5f8ff" stroke="#d6e1f5"/>
+<rect x="1350" y="1490" width="4" height="64" rx="2" fill="url(#brand)"/>
+<text x="1366" y="1516" class="h">Access control</text>
+<text x="1366" y="1536" class="t">admin / reporter only; RAG per project</text>
+<rect x="1608" y="1490" width="248" height="64" rx="10" fill="#f5f8ff" stroke="#d6e1f5"/>
+<rect x="1608" y="1490" width="4" height="64" rx="2" fill="url(#brand)"/>
+<text x="1624" y="1516" class="h">Limits</text>
+<text x="1624" y="1536" class="t">timeouts, retries, rate limits, quotas</text>
+<rect x="1270" y="57" width="97.2" height="18" rx="9" fill="#e2e8f0"/>
+<text x="1277" y="70" class="tag" fill="#334155">DETERMINISTIC</text>
+<rect x="1375.2" y="57" width="33.2" height="18" rx="9" fill="#cffafe"/>
+<text x="1382.2" y="70" class="tag" fill="#0e7490">RAG</text>
+<rect x="1416.4" y="57" width="71.6" height="18" rx="9" fill="#dbeafe"/>
+<text x="1423.4" y="70" class="tag" fill="#1d4ed8">LLM AGENT</text>
+<rect x="1496" y="57" width="65.2" height="18" rx="9" fill="#fee2e2"/>
+<text x="1503" y="70" class="tag" fill="#b91c1c">CRITICAL</text>
+<rect x="1569.2" y="57" width="46" height="18" rx="9" fill="#e0e7ff"/>
+<text x="1576.2" y="70" class="tag" fill="#4338ca">HUMAN</text>
+<path d="M386,362 L386,388" class="dash"/>
+<rect x="396" y="364" width="313.2" height="22" rx="11" class="pill"/>
+<text x="405" y="379" class="lbl">indexed chunks → K# for stage 1 + chatbot</text>
+</svg>

@@ -1,0 +1,214 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1180" viewBox="0 0 1800 1180" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+    <style>
+      .title { font-size: 30px; font-weight: 700; fill: #0f172a; }
+      .subtitle { font-size: 15px; fill: #475569; }
+      .h { font-size: 17px; font-weight: 700; fill: #0f172a; }
+      .h2 { font-size: 14px; font-weight: 700; fill: #1e293b; }
+      .t { font-size: 13px; fill: #334155; }
+      .s { font-size: 12px; fill: #475569; }
+      .lbl { font-size: 12px; fill: #1e293b; font-weight: 600; }
+      .box { rx: 12; ry: 12; stroke-width: 1.5; }
+      .inner { rx: 8; ry: 8; stroke-width: 1; fill: #ffffff; }
+      .line { stroke: #475569; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .dash { stroke: #475569; stroke-width: 2; fill: none; stroke-dasharray: 6 4; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1800" height="1180" fill="#f8fafc"/>
+  <text x="30" y="48" class="title">ImpactIQ — System Architecture</text>
+  <text x="30" y="74" class="subtitle">AI-assisted defect investigation, project knowledge (RAG) and project chatbot</text>
+
+  <!-- ============ USERS ============ -->
+  <rect x="30" y="110" width="190" height="300" class="box" fill="#f1f5f9" stroke="#94a3b8"/>
+  <text x="50" y="140" class="h">Users</text>
+  <text x="50" y="165" class="s">Web browser</text>
+  <rect x="45" y="185" width="160" height="40" class="inner" stroke="#cbd5e1"/>
+  <text x="60" y="210" class="t">Admin</text>
+  <rect x="45" y="235" width="160" height="40" class="inner" stroke="#cbd5e1"/>
+  <text x="60" y="260" class="t">Developer</text>
+  <rect x="45" y="285" width="160" height="40" class="inner" stroke="#cbd5e1"/>
+  <text x="60" y="310" class="t">Tester / QA</text>
+  <text x="45" y="350" class="s">Project roles:</text>
+  <text x="45" y="370" class="s">OWNER · EDITOR · VIEWER</text>
+  <text x="45" y="390" class="s">(Admin = OWNER everywhere)</text>
+
+  <!-- ============ FRONTEND ============ -->
+  <rect x="260" y="110" width="270" height="560" class="box" fill="#eff6ff" stroke="#60a5fa"/>
+  <text x="280" y="140" class="h">Frontend (SPA)</text>
+  <text x="280" y="162" class="s">React 19 · Vite 7 · port 5173</text>
+  <text x="280" y="196" class="h2">Pages</text>
+  <rect x="275" y="206" width="240" height="250" class="inner" stroke="#bfdbfe"/>
+  <text x="290" y="230" class="t">• Login / Register</text>
+  <text x="290" y="256" class="t">• Dashboard (metrics)</text>
+  <text x="290" y="282" class="t">• Defects list</text>
+  <text x="290" y="308" class="t">• Defect form (AI draft)</text>
+  <text x="290" y="334" class="t">• Defect detail</text>
+  <text x="302" y="352" class="s">  evidence · AI investigation</text>
+  <text x="290" y="378" class="t">• Project Knowledge</text>
+  <text x="302" y="396" class="s">  documents · components · members</text>
+  <text x="290" y="422" class="t">• AI Chatbot</text>
+  <text x="302" y="440" class="s">  citations · follow-ups</text>
+  <text x="280" y="485" class="h2">Libraries</text>
+  <rect x="275" y="495" width="240" height="160" class="inner" stroke="#bfdbfe"/>
+  <text x="290" y="520" class="t">axios (session cookie +</text>
+  <text x="290" y="538" class="t">  X-XSRF-TOKEN header)</text>
+  <text x="290" y="564" class="t">react-router-dom</text>
+  <text x="290" y="590" class="t">react-markdown (chat answers)</text>
+  <text x="290" y="616" class="t">lucide-react (icons)</text>
+  <text x="290" y="642" class="t">Vitest (tests)</text>
+
+  <!-- arrows users -> frontend -> backend -->
+  <path d="M220,260 L258,260" class="line"/>
+  <path d="M530,330 L578,330" class="line"/>
+  <path d="M578,360 L532,360" class="line"/>
+  <text x="536" y="302" class="lbl">REST</text><text x="536" y="318" class="lbl">/api</text>
+  <text x="537" y="385" class="s">JSON</text>
+
+  <!-- ============ BACKEND ============ -->
+  <rect x="580" y="110" width="760" height="760" class="box" fill="#f0fdf4" stroke="#4ade80"/>
+  <text x="600" y="140" class="h">Backend — Spring Boot 3.5.6 · Java 21 · port 8080</text>
+
+  <!-- security -->
+  <rect x="600" y="158" width="720" height="62" class="inner" stroke="#86efac"/>
+  <text x="615" y="182" class="h2">Security layer</text>
+  <text x="615" y="204" class="t">Spring Security session login · CSRF · AccessControlService (project RBAC) · chat rate limiter · audit log</text>
+
+  <!-- controllers -->
+  <rect x="600" y="232" width="720" height="92" class="inner" stroke="#86efac"/>
+  <text x="615" y="256" class="h2">REST controllers</text>
+  <text x="615" y="280" class="t">Auth · Projects (edit/delete, components, AI discover) · Knowledge (documents, search) · Defects</text>
+  <text x="615" y="304" class="t">Defect Draft · Evidence · Investigations · Impact Analysis · Chat · Dashboard · Health</text>
+
+  <!-- services -->
+  <rect x="600" y="336" width="440" height="110" class="inner" stroke="#86efac"/>
+  <text x="615" y="360" class="h2">Business services</text>
+  <text x="615" y="384" class="t">ProjectService · DefectService · EvidenceService</text>
+  <text x="615" y="406" class="t">ChatService · ComponentDiscoveryService</text>
+  <text x="615" y="428" class="t">InvestigationService · DashboardService · AuditService</text>
+
+  <rect x="1055" y="336" width="265" height="110" class="inner" stroke="#86efac"/>
+  <text x="1070" y="360" class="h2">Background executors</text>
+  <text x="1070" y="384" class="t">Document processing</text>
+  <text x="1070" y="406" class="t">Investigation runs</text>
+  <text x="1070" y="428" class="t">Component discovery (events)</text>
+
+  <!-- RAG pipeline -->
+  <rect x="600" y="460" width="350" height="395" class="inner" stroke="#22c55e"/>
+  <text x="615" y="486" class="h2">Knowledge / RAG pipeline</text>
+  <g class="t">
+    <rect x="620" y="500" width="310" height="34" rx="6" fill="#ecfdf5" stroke="#a7f3d0"/>
+    <text x="632" y="522">1. File validation (type, size)</text>
+    <rect x="620" y="542" width="310" height="34" rx="6" fill="#ecfdf5" stroke="#a7f3d0"/>
+    <text x="632" y="564">2. Text extraction (PDFBox / text)</text>
+    <rect x="620" y="584" width="310" height="34" rx="6" fill="#ecfdf5" stroke="#a7f3d0"/>
+    <text x="632" y="606">3. Secret redaction · injection check</text>
+    <rect x="620" y="626" width="310" height="34" rx="6" fill="#ecfdf5" stroke="#a7f3d0"/>
+    <text x="632" y="648">4. Chunking</text>
+    <rect x="620" y="668" width="310" height="34" rx="6" fill="#ecfdf5" stroke="#a7f3d0"/>
+    <text x="632" y="690">5. Embeddings (768-dim vectors)</text>
+    <rect x="620" y="710" width="310" height="34" rx="6" fill="#ecfdf5" stroke="#a7f3d0"/>
+    <text x="632" y="732">6. Indexed → DocumentIndexedEvent</text>
+  </g>
+  <text x="615" y="772" class="h2">Hybrid retrieval</text>
+  <text x="615" y="794" class="t">BM25 keywords (35%) + cosine similarity (65%)</text>
+  <text x="615" y="814" class="t">component boost · project-scoped only</text>
+  <text x="615" y="834" class="s">falls back to keyword-only without embeddings</text>
+
+  <!-- Agents -->
+  <rect x="965" y="460" width="355" height="395" class="inner" stroke="#22c55e"/>
+  <text x="980" y="486" class="h2">AI agent layer (Google ADK)</text>
+  <text x="980" y="508" class="s">StructuredAgentInvoker: JSON schema · retries · deadline</text>
+  <text x="980" y="526" class="s">PromptSupport (untrusted data) · OutputSanitizer</text>
+  <text x="980" y="556" class="h2">Investigation pipeline (orchestrator)</text>
+  <text x="992" y="580" class="t">Defect Triage Agent</text>
+  <text x="992" y="602" class="t">→ Project Context Agent (RAG)</text>
+  <text x="992" y="624" class="t">→ Evidence Analysis Agent</text>
+  <text x="992" y="646" class="t">→ Root Cause Analysis Agent</text>
+  <text x="992" y="668" class="t">→ Fix Recommendation Agent</text>
+  <text x="980" y="702" class="h2">Other agents</text>
+  <text x="992" y="726" class="t">Defect Draft Agent (text / file → defect)</text>
+  <text x="992" y="748" class="t">Chat Assistant Agent (cited answers)</text>
+  <text x="992" y="770" class="t">Component Discovery Agent</text>
+  <text x="980" y="804" class="s">Server-side checks: unknown citations removed,</text>
+  <text x="980" y="822" class="s">invented component names rejected, hypotheses</text>
+  <text x="980" y="840" class="s">always labelled as needing confirmation</text>
+
+  <!-- ============ DATA / EXTERNAL ============ -->
+  <rect x="1390" y="110" width="380" height="430" class="box" fill="#fff7ed" stroke="#fb923c"/>
+  <text x="1410" y="140" class="h">MySQL — impactiq_db</text>
+  <text x="1410" y="162" class="s">XAMPP · port 3306 · Spring Data JPA</text>
+  <rect x="1405" y="176" width="350" height="350" class="inner" stroke="#fed7aa"/>
+  <text x="1420" y="200" class="h2">Accounts &amp; projects</text>
+  <text x="1420" y="220" class="t">app_users · projects · project_members</text>
+  <text x="1420" y="240" class="t">project_components · audit_events</text>
+  <text x="1420" y="270" class="h2">Knowledge</text>
+  <text x="1420" y="290" class="t">knowledge_documents · document_versions</text>
+  <text x="1420" y="310" class="t">document_chunks (text + embedding vector)</text>
+  <text x="1420" y="340" class="h2">Defects &amp; AI investigation</text>
+  <text x="1420" y="360" class="t">defects · defect_evidence</text>
+  <text x="1420" y="380" class="t">investigations · investigation_steps</text>
+  <text x="1420" y="400" class="t">investigation_feedback · impact_analyses</text>
+  <text x="1420" y="430" class="h2">Chatbot</text>
+  <text x="1420" y="450" class="t">chat_conversations</text>
+  <text x="1420" y="470" class="t">chat_messages (answer, status,</text>
+  <text x="1420" y="490" class="t">  citations, warnings) · 90-day retention</text>
+
+  <rect x="1390" y="570" width="380" height="110" class="box" fill="#fefce8" stroke="#facc15"/>
+  <text x="1410" y="600" class="h">File storage (server disk)</text>
+  <text x="1410" y="625" class="t">~/.impactiq/storage (IMPACTIQ_STORAGE_DIR)</text>
+  <text x="1410" y="647" class="t">Original uploaded files (PDF, MD, code, logs)</text>
+  <text x="1410" y="667" class="s">Outside web root · back up together with the DB</text>
+
+  <rect x="1390" y="710" width="380" height="160" class="box" fill="#faf5ff" stroke="#c084fc"/>
+  <text x="1410" y="740" class="h">Google Gemini API (external)</text>
+  <text x="1410" y="766" class="t">gemini-3.1-flash-lite — agents and chat</text>
+  <text x="1410" y="788" class="t">gemini-embedding-001 — embeddings</text>
+  <text x="1410" y="814" class="s">Receives: questions + redacted evidence</text>
+  <text x="1410" y="832" class="s">Key: GEMINI_API_KEY (environment variable,</text>
+  <text x="1410" y="850" class="s">never stored in code)</text>
+
+  <!-- backend -> data arrows -->
+  <path d="M1340,300 L1388,300" class="line"/>
+  <text x="1343" y="290" class="lbl">JPA</text>
+  <path d="M1340,625 L1388,625" class="line"/>
+  <text x="1345" y="615" class="lbl">files</text>
+  <path d="M1340,790 L1388,790" class="line"/>
+  <text x="1342" y="780" class="lbl">HTTPS</text>
+
+  <!-- ============ FLOWS ============ -->
+  <text x="30" y="915" class="h">Main data flows</text>
+
+  <rect x="30" y="930" width="570" height="225" class="box" fill="#ffffff" stroke="#60a5fa"/>
+  <text x="50" y="960" class="h2">① Document upload → knowledge</text>
+  <text x="50" y="988" class="t">1. User uploads a file on Project Knowledge (EDITOR+)</text>
+  <text x="50" y="1012" class="t">2. File saved to disk, metadata to knowledge_documents</text>
+  <text x="50" y="1036" class="t">3. Background: extract → redact → chunk → embed</text>
+  <text x="50" y="1060" class="t">4. Chunks + vectors saved to document_chunks</text>
+  <text x="50" y="1084" class="t">5. Event → Component Discovery Agent reads the text</text>
+  <text x="50" y="1108" class="t">6. Grounded component names added to project_components</text>
+  <text x="50" y="1136" class="s">Status shown in UI: PROCESSING → INDEXED / FAILED</text>
+
+  <rect x="615" y="930" width="570" height="225" class="box" fill="#ffffff" stroke="#22c55e"/>
+  <text x="635" y="960" class="h2">② Defect → AI investigation</text>
+  <text x="635" y="988" class="t">1. Defect created manually or drafted by AI from text / file</text>
+  <text x="635" y="1012" class="t">2. Evidence attached (logs, screenshots, notes)</text>
+  <text x="635" y="1036" class="t">3. Investigation run: triage → context (RAG) → evidence</text>
+  <text x="635" y="1060" class="t">    → root cause hypotheses → fix recommendations</text>
+  <text x="635" y="1084" class="t">4. Each step saved in investigation_steps</text>
+  <text x="635" y="1108" class="t">5. Developer gives feedback (confirm / reject)</text>
+  <text x="635" y="1136" class="s">Results shown on Defect detail page with sources</text>
+
+  <rect x="1200" y="930" width="570" height="225" class="box" fill="#ffffff" stroke="#c084fc"/>
+  <text x="1220" y="960" class="h2">③ Chatbot question → cited answer</text>
+  <text x="1220" y="988" class="t">1. Question checked: access, rate limit, secret redaction</text>
+  <text x="1220" y="1012" class="t">2. Evidence: defect (D1) + investigation + chunks (K1..Kn)</text>
+  <text x="1220" y="1036" class="t">3. Hybrid search finds the most relevant chunks</text>
+  <text x="1220" y="1060" class="t">4. Chat Assistant Agent → Gemini (last 10 turns + evidence)</text>
+  <text x="1220" y="1084" class="t">5. Server validates citations and answer status</text>
+  <text x="1220" y="1108" class="t">6. Saved to chat_messages, shown with citations</text>
+  <text x="1220" y="1136" class="s">GROUNDED · PARTIAL · NOT_FOUND_IN_KNOWLEDGE · NEEDS_CLARIFICATION</text>
+</svg>
